@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Vehicles/BaseVehicleActor.h"
 #include "FireEngine.generated.h"
 
 UCLASS()
-class BATTALIONCHIEF_API AFireEngine : public AActor
+class BATTALIONCHIEF_API AFireEngine : public ABaseVehicleActor
 {
 	GENERATED_BODY()
 	

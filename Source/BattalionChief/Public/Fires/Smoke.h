@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Fires/BaseFireActor.h"
 #include "Smoke.generated.h"
 
 UCLASS()
-class BATTALIONCHIEF_API ASmoke : public AActor
+class BATTALIONCHIEF_API ASmoke : public ABaseFireActor
 {
 	GENERATED_BODY()
 	

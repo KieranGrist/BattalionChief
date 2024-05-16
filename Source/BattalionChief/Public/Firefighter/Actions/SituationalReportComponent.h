@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ActorComponent.h"
+#include "Firefighter/Actions/BaseActionComponent.h"
 #include "SituationalReportComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BATTALIONCHIEF_API USituationalReportComponent : public UActorComponent
+class BATTALIONCHIEF_API USituationalReportComponent : public UBaseActionComponent
 {
 	GENERATED_BODY()
 

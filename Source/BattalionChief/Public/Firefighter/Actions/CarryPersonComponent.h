@@ -3,12 +3,12 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Components/ActorComponent.h"
+#include "Firefighter/Actions/BaseActionComponent.h"
 #include "CarryPersonComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class BATTALIONCHIEF_API UCarryPersonComponent : public UActorComponent
+class BATTALIONCHIEF_API UCarryPersonComponent : public UBaseActionComponent
 {
 	GENERATED_BODY()
 

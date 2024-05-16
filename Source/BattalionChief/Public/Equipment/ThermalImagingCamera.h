@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Equipment/BaseEquipmentActor.h"
 #include "ThermalImagingCamera.generated.h"
 
 UCLASS()
-class BATTALIONCHIEF_API AThermalImagingCamera : public AActor
+class BATTALIONCHIEF_API AThermalImagingCamera : public ABaseEquipmentActor
 {
 	GENERATED_BODY()
 	

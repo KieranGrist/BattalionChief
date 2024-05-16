@@ -7,13 +7,13 @@
 #include "BaseFirefighterPawn.generated.h"
 
 UCLASS()
-class BATTALIONCHIEF_API ABaseFirefighterPawn : public APawn
+class BATTALIONCHIEF_API ABaseFireFighterPawn : public APawn
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this pawn's properties
-	ABaseFirefighterPawn();
+	ABaseFireFighterPawn();
 
 protected:
 	// Called when the game starts or when spawned

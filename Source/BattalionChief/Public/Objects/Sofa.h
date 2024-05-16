@@ -3,11 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Objects/BaseObjectActor.h"
 #include "Sofa.generated.h"
 
 UCLASS()
-class BATTALIONCHIEF_API ASofa : public AActor
+class BATTALIONCHIEF_API ASofa : public ABaseObjectActor
 {
 	GENERATED_BODY()
 	
