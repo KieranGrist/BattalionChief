@@ -3,24 +3,20 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Firefighter/BaseFirefighterPawn.h"
+#include "FireFighter/BaseFireFighterCharacter.h"
 #include "Medic.generated.h"
 
 UCLASS()
-class BATTALIONCHIEF_API AMedic : public ABaseFireFighterPawn
+class BATTALIONCHIEF_API AMedic : public ABaseFireFighterCharacter
 {
 	GENERATED_BODY()
-	
-public:	
-	// Sets default values for this actor's properties
+
+public:
 	AMedic();
 
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
-public:	
-	// Called every frame
+	virtual void BeginPlay();
+
 	virtual void Tick(float DeltaTime) override;
-
 };

@@ -3,16 +3,15 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
-#include "Chief.generated.h"
+#include "BaseCharacter.h"
+#include "BaseFireFighterCharacter.generated.h"
 
 UCLASS()
-class BATTALIONCHIEF_API AChief : public APawn
+class BATTALIONCHIEF_API ABaseFireFighterCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
-
 public:
-	AChief();
+	ABaseFireFighterCharacter();
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 

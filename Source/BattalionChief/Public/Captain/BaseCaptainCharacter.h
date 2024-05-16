@@ -1,18 +1,16 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Pawn.h"
-#include "Chief.generated.h"
+#include "BaseCharacter.h"
+#include "BaseCaptainCharacter.generated.h"
 
 UCLASS()
-class BATTALIONCHIEF_API AChief : public APawn
+class BATTALIONCHIEF_API ABaseCaptainCharacter : public ABaseCharacter
 {
 	GENERATED_BODY()
 
 public:
-	AChief();
+	ABaseCaptainCharacter();
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
