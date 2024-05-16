@@ -1,7 +1,6 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "BattalionChiefGameMode.h"
-#include "BattalionChiefCharacter.h"
 #include "UObject/ConstructorHelpers.h"
 
 ABattalionChiefGameMode::ABattalionChiefGameMode()

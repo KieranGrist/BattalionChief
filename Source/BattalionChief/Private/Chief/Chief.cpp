@@ -1,7 +1,7 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 
-#include "Chief.h"
+#include "Chief/Chief.h"
 
 // Sets default values
 AChief::AChief()

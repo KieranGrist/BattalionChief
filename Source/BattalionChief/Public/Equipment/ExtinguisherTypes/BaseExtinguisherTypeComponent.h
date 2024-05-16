@@ -14,7 +14,7 @@ class BATTALIONCHIEF_API UBaseExtinguisherTypeComponent : public UActorComponent
 
 public:
 	// Sets default values for this component's properties
-	UBaseEquipmentComponent();
+	UBaseExtinguisherTypeComponent();
 
 protected:
 	// Called when the game starts
