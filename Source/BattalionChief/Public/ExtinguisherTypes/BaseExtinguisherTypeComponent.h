@@ -16,13 +16,34 @@ public:
 	// Sets default values for this component's properties
 	UBaseExtinguisherTypeComponent();
 
-protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	// Get the extinguishing power of this component
+	UFUNCTION(BlueprintCallable, Category = "Extinguishing")
+	float GetExtinguishPower() const;
 
+	// Set the extinguishing power of this component
+	UFUNCTION(BlueprintCallable, Category = "Extinguishing")
+	void SetExtinguishPower(float InExtinguishPower);
+
+	// Get the extinguishing power of this component
+	UFUNCTION(BlueprintCallable, Category = "Extinguishing")
+	float GetObjectDamage() const;
+
+	// Set the extinguishing power of this component
+	UFUNCTION(BlueprintCallable, Category = "Extinguishing")
+	void SetObjectDamage(float InObjectDamage);
+
+protected:
+	// The extinguishing power of this component
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Extinguishing")
+	float ExtinguishPower;
+	
+	// Certain Extinguishers can cause damage to objects
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Extinguishing")
+	float ObjectDamage;
 };
