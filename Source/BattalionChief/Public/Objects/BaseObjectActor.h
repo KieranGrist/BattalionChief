@@ -23,45 +23,45 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 	// Function to apply damage to this object
-	UFUNCTION(BlueprintCallable, Category = "Fire")
+	UFUNCTION(BlueprintCallable, Category = "Object")
 	void ApplyDamage(float InDamageAmount);
 
 	// Function to ignite the object with a specific fire
-	UFUNCTION(BlueprintCallable, Category = "Fire")
-	void Ignite(class ABaseFireActor* InFire);
+	UFUNCTION(BlueprintCallable, Category = "Object")
+	void Ignite(ABaseFireActor* InFire);
 
-	UFUNCTION(BlueprintCallable, Category = "Fire")
+	UFUNCTION(BlueprintCallable, Category = "Object")
 	void UpdateSelfIgnitionChance();
 
 	// Function called when the object is destroyed by fire
-	UFUNCTION(BlueprintImplementableEvent, Category = "Fire")
+	UFUNCTION(BlueprintImplementableEvent, Category = "Object")
 	void OnObjectDestroyed_BP();
 
 	// Event dispatcher to notify when the object is destroyed
-	UPROPERTY(BlueprintAssignable, Category = "Fire")
+	UPROPERTY(BlueprintAssignable, Category = "Object")
 	FOnObjectDestroyedSignature OnObjectDestroyed;
 protected:
 	// Health of the object
-	UPROPERTY(EditAnywhere, Category = "Fire")
+	UPROPERTY(EditAnywhere, Category = "Object")
 	float Health;
 
 	// Weight of the object (affects fire spread and intensity)
-	UPROPERTY(EditAnywhere, Category = "Fire")
+	UPROPERTY(EditAnywhere, Category = "Object")
 	float Weight;
 
 	// Objects Current Temperature
-	UPROPERTY(EditAnywhere, Category = "Fire")
+	UPROPERTY(EditAnywhere, Category = "Object")
 	float Temperature;
 	
 	// Flammability of the object (affects ignition probability and fire spread)
-	UPROPERTY(EditAnywhere, Category = "Fire")
+	UPROPERTY(EditAnywhere, Category = "Object")
 	float Flammability;
 
 	// In the right conditions some objects can catch alight ig temp 
-	UPROPERTY(EditAnywhere, Category = "Fire")
+	UPROPERTY(EditAnywhere, Category = "Object")
 	float SelfIgnitionChance;
 
 	// What Fire This Object Creates
-	UPROPERTY(EditAnywhere, Category = "Fire")
+	UPROPERTY(EditAnywhere, Category = "Object")
 	TSubclassOf<ABaseFireActor> FireType;
 };

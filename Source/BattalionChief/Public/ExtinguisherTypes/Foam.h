@@ -13,5 +13,8 @@ UCLASS()
 class BATTALIONCHIEF_API UFoam : public UBaseExtinguisherTypeComponent
 {
 	GENERATED_BODY()
-	
+
+public:
+	UFoam();
 };
+

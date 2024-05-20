@@ -3,3 +3,6 @@
 
 #include "ExtinguisherTypes/Foam.h"
 
+UFoam::UFoam()
+{
+}

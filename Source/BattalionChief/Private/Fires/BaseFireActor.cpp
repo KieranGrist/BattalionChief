@@ -7,10 +7,14 @@ ABaseFireActor::ABaseFireActor()
 	// Set this actor to call Tick() every frame.
 	PrimaryActorTick.bCanEverTick = true;
 
+	// Create a scene component and set it as the root component
+	USceneComponent* RootSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootSceneComponent"));
+	SetRootComponent(RootSceneComponent);
+
 	// Create the hitbox component
-	HitBox = CreateDefaultSubobject<UShapeComponent>(TEXT("HitBox"));
-	// Set the hitbox as the root component
-	RootComponent = HitBox;
+	HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBox"));
+	HitBox->SetupAttachment(RootComponent);;
+	//SetRootComponent(HitBox);
 
 	// Initialize other components
 	FireParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("FireParticles"));
@@ -24,6 +28,7 @@ ABaseFireActor::ABaseFireActor()
 void ABaseFireActor::BeginPlay()
 {
 	Super::BeginPlay();
+
 }
 
 // Called every frame
@@ -48,23 +53,57 @@ void ABaseFireActor::Burn()
 	ApplyDamage();
 }
 
-// Function to extinguish the fire
-void ABaseFireActor::Extinguish(UBaseExtinguisherTypeComponent* Extinguisher)
+// Function called when the fire is hit by an object containing extinguisher info
+void ABaseFireActor::Extinguish(UBaseExtinguisherTypeComponent* InBaseExtinguisherTypeComponent)
 {
-	if (HelpfulExtinguisherTypes.Contains(Extinguisher->GetClass()))
+	float* value = HelpfulExtinguisherTypesMap.Find(InBaseExtinguisherTypeComponent->GetClass());
+	if (value)
 	{
-		Health -= Extinguisher->GetExtinguishPower();
+		Health -= InBaseExtinguisherTypeComponent->GetExtinguishPower() * *value;
 		if (Health <= 0)
 		{
 			Destroy();
 		}
 	}
-	else if (HinderingExtinguisherTypes.Contains(Extinguisher->GetClass()))
+	value = HinderingExtinguisherTypesMap.Find(InBaseExtinguisherTypeComponent->GetClass());
+	if (value)
 	{
-		// Implement logic if the extinguisher hinders fire suppression
+		Health += InBaseExtinguisherTypeComponent->GetExtinguishPower() * *value;
+		Spread();
 	}
 }
 
+void ABaseFireActor::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorBeginOverlap(OtherActor);
+
+	if (OtherActor && OtherActor != this)
+	{
+		// Print a message to the screen
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Overlap Begin with %s"), *OtherActor->GetName()));
+		}
+
+		// Additional overlap handling logic can go here
+	}
+}
+
+void ABaseFireActor::NotifyActorEndOverlap(AActor* OtherActor)
+{
+	Super::NotifyActorEndOverlap(OtherActor);
+
+	if (OtherActor && OtherActor != this)
+	{
+		// Print a message to the screen
+		if (GEngine)
+		{
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Overlap End with %s"), *OtherActor->GetName()));
+		}
+
+		// Additional overlap handling logic can go here
+	}
+}
 // Function to calculate damage to burning objects
 float ABaseFireActor::CalculateDamage()
 {

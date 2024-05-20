@@ -16,13 +16,15 @@ public:
 	// Sets default values for this component's properties
 	USituationalReportComponent();
 
-protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+	// Executes the action
+	virtual void ExecuteAction() PURE_VIRTUAL(ABaseObjectActor::ExecuteAction, );
+
+	// Checks if the action can be done
+	virtual bool CanActionBeCompleted() const PURE_VIRTUAL(ABaseObjectActor::CanActionBeCompleted, return false;);
 };

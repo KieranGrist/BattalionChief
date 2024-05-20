@@ -13,5 +13,8 @@ UCLASS()
 class BATTALIONCHIEF_API UClassD : public UBaseExtinguisherTypeComponent
 {
 	GENERATED_BODY()
-	
+
+public:
+	UClassD();
 };
+

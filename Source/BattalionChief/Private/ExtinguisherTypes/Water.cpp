@@ -3,3 +3,8 @@
 
 #include "ExtinguisherTypes/Water.h"
 
+UWater::UWater()
+{
+	ExtinguishPower = 0.8f; 
+	ObjectDamage = 0.1f;
+}

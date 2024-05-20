@@ -3,15 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Equipment/FireExtinguisher.h"
+#include "ExtinguisherTypes/BaseExtinguisherTypeComponent.h"
 #include "CarbonDioxide.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BATTALIONCHIEF_API ACarbonDioxide : public AFireExtinguisher
+class BATTALIONCHIEF_API UCarbonDioxide : public UBaseExtinguisherTypeComponent
 {
 	GENERATED_BODY()
-	
+
+public:
+	UCarbonDioxide();
 };
+

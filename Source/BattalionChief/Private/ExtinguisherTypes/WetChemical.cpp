@@ -3,3 +3,6 @@
 
 #include "ExtinguisherTypes/WetChemical.h"
 
+UWetChemical::UWetChemical()
+{
+}

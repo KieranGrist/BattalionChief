@@ -3,3 +3,6 @@
 
 #include "ExtinguisherTypes/BCPowder.h"
 
+UBCPowder::UBCPowder()
+{
+}

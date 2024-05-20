@@ -3,3 +3,6 @@
 
 #include "ExtinguisherTypes/CarbonDioxide.h"
 
+UCarbonDioxide::UCarbonDioxide()
+{
+}

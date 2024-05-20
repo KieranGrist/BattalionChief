@@ -3,3 +3,6 @@
 
 #include "ExtinguisherTypes/ABCPowder.h"
 
+UABCPowder::UABCPowder()
+{
+}

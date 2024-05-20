@@ -27,4 +27,8 @@ public:
 
 	// Checks if the action can be done
 	virtual bool CanActionBeCompleted() const PURE_VIRTUAL(ABaseObjectActor::CanActionBeCompleted, return false;);
+
+	virtual float ScoreAction() PURE_VIRTUAL(ABaseObjectActor::ExecuteAction, return -1; );
+
+	//TODO: MOVE TO COMPONENT
 };

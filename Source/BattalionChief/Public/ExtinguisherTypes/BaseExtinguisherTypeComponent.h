@@ -40,10 +40,10 @@ public:
 
 protected:
 	// The extinguishing power of this component
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Extinguishing")
-	float ExtinguishPower;
-	
+	UPROPERTY(EditAnywhere, Category = "Extinguishing")
+	float ExtinguishPower = 0.8f;
+
 	// Certain Extinguishers can cause damage to objects
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Extinguishing")
-	float ObjectDamage;
+	UPROPERTY(EditAnywhere, Category = "Extinguishing")
+	float ObjectDamage = 0.1f;
 };

@@ -14,4 +14,6 @@ class BATTALIONCHIEF_API UABCPowder : public UBaseExtinguisherTypeComponent
 {
 	GENERATED_BODY()
 	
+public:
+	UABCPowder();
 };
