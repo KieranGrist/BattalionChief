@@ -25,3 +25,17 @@ void AAxe::Tick(float DeltaTime)
 
 }
 
+void AAxe::UseEquipment()
+{
+}
+
+bool AAxe::CanUseEquipment() const
+{
+	return false;
+}
+
+float AAxe::ScoreEquipment() const
+{
+	return 0.0f;
+}
+

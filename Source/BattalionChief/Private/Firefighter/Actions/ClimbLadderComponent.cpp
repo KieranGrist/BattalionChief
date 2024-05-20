@@ -32,3 +32,17 @@ void UClimbLadderComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 	// ...
 }
 
+void UClimbLadderComponent::ExecuteAction()
+{
+	return Super::ExecuteAction();
+}
+
+bool UClimbLadderComponent::CanActionBeCompleted() const
+{
+	return Super::CanActionBeCompleted();
+}
+
+float UClimbLadderComponent::ScoreAction()
+{
+	return Super::ScoreAction();
+}

@@ -25,3 +25,17 @@ void ASCBA::Tick(float DeltaTime)
 
 }
 
+void ASCBA::UseEquipment()
+{
+	return Super::UseEquipment();
+}
+
+bool ASCBA::CanUseEquipment() const
+{
+	return Super::CanUseEquipment();
+}
+
+float ASCBA::ScoreEquipment() const
+{
+	return Super::ScoreEquipment();
+}

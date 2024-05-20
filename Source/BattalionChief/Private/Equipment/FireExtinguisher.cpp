@@ -35,6 +35,11 @@ bool AFireExtinguisher::CanUseEquipment() const
     return IsTankEmpty();
 }
 
+float AFireExtinguisher::ScoreEquipment() const
+{
+    return Super::ScoreEquipment();
+}
+
 void AFireExtinguisher::Spray()
 {
     Origin = ProjectileSpawn->GetComponentLocation();

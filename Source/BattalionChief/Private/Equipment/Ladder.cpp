@@ -25,3 +25,17 @@ void ALadder::Tick(float DeltaTime)
 
 }
 
+void ALadder::UseEquipment()
+{
+	return Super::UseEquipment();
+}
+
+bool ALadder::CanUseEquipment() const
+{
+	return Super::CanUseEquipment();
+}
+
+float ALadder::ScoreEquipment() const
+{
+	return Super::ScoreEquipment();
+}

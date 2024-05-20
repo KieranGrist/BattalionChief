@@ -32,3 +32,17 @@ void UCarryPersonComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 	// ...
 }
 
+void UCarryPersonComponent::ExecuteAction()
+{
+	return Super::ExecuteAction();
+}
+
+bool UCarryPersonComponent::CanActionBeCompleted() const
+{
+	return Super::CanActionBeCompleted();
+}
+
+float UCarryPersonComponent::ScoreAction()
+{
+	return Super::ScoreAction();
+}

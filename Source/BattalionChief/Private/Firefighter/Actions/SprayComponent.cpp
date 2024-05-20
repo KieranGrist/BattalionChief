@@ -32,3 +32,17 @@ void USprayComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	// ...
 }
 
+void USprayComponent::ExecuteAction()
+{
+	return Super::ExecuteAction();
+}
+
+bool USprayComponent::CanActionBeCompleted() const
+{
+	return Super::CanActionBeCompleted();
+}
+
+float USprayComponent::ScoreAction()
+{
+	return Super::ScoreAction();
+}

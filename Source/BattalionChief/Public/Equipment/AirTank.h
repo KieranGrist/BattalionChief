@@ -20,4 +20,13 @@ public:
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	// Uses the equipment
+	virtual void UseEquipment()  override;
+
+	// Checks if the equipment can be used
+	virtual bool CanUseEquipment() const override;
+
+	// Returns a score for the equipment based on situation, used by captains
+	virtual float ScoreEquipment() const  override;
 };

@@ -25,3 +25,17 @@ void AFirstAidKit::Tick(float DeltaTime)
 
 }
 
+void AFirstAidKit::UseEquipment()
+{
+	return Super::UseEquipment();
+}
+
+bool AFirstAidKit::CanUseEquipment() const
+{
+	return Super::CanUseEquipment();
+}
+
+float AFirstAidKit::ScoreEquipment() const
+{
+	return Super::ScoreEquipment();
+}

@@ -25,3 +25,17 @@ void AFireHose::Tick(float DeltaTime)
 
 }
 
+void AFireHose::UseEquipment()
+{
+	return Super::UseEquipment();
+}
+
+bool AFireHose::CanUseEquipment() const
+{
+	return Super::CanUseEquipment();
+}
+
+float AFireHose::ScoreEquipment() const
+{
+	return Super::ScoreEquipment();
+}

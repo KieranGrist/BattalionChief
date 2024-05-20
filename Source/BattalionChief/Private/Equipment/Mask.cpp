@@ -25,3 +25,17 @@ void AMask::Tick(float DeltaTime)
 
 }
 
+void AMask::UseEquipment()
+{
+	return Super::UseEquipment();
+}
+
+bool AMask::CanUseEquipment() const
+{
+	return Super::CanUseEquipment();
+}
+
+float AMask::ScoreEquipment() const
+{
+	return Super::ScoreEquipment();
+}

@@ -25,3 +25,17 @@ void AHelmet::Tick(float DeltaTime)
 
 }
 
+void AHelmet::UseEquipment()
+{
+	return Super::UseEquipment();
+}
+
+bool AHelmet::CanUseEquipment() const
+{
+	return Super::CanUseEquipment();
+}
+
+float AHelmet::ScoreEquipment() const
+{
+	return Super::ScoreEquipment();
+}

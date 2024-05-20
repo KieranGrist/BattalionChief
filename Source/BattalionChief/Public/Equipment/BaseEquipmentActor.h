@@ -29,6 +29,9 @@ public:
 
     // Checks if the equipment can be used
     virtual bool CanUseEquipment() const PURE_VIRTUAL(ABaseEquipmentActor::CanUseEquipment, return false;);
+ 
+    // Returns a score for the equipment based on situation, used by captains
+    virtual float ScoreEquipment() const PURE_VIRTUAL(ABaseEquipmentActor::ScoreEquipment, return -1;);
 
 protected:
     // Static mesh component for equipment model

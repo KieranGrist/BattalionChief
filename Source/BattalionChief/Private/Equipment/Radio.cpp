@@ -25,3 +25,17 @@ void ARadio::Tick(float DeltaTime)
 
 }
 
+void ARadio::UseEquipment()
+{
+	return Super::UseEquipment();
+}
+
+bool ARadio::CanUseEquipment() const
+{
+	return Super::CanUseEquipment();
+}
+
+float ARadio::ScoreEquipment() const
+{
+	return Super::ScoreEquipment();
+}

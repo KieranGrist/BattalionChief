@@ -25,3 +25,17 @@ void AThermalImagingCamera::Tick(float DeltaTime)
 
 }
 
+void AThermalImagingCamera::UseEquipment()
+{
+	return Super::UseEquipment();
+}
+
+bool AThermalImagingCamera::CanUseEquipment() const
+{
+	return Super::CanUseEquipment();
+}
+
+float AThermalImagingCamera::ScoreEquipment() const
+{
+	return Super::ScoreEquipment();
+}

@@ -25,3 +25,17 @@ void APikePole::Tick(float DeltaTime)
 
 }
 
+void APikePole::UseEquipment()
+{
+	return Super::UseEquipment();
+}
+
+bool APikePole::CanUseEquipment() const
+{
+	return Super::CanUseEquipment();
+}
+
+float APikePole::ScoreEquipment() const
+{
+	return Super::ScoreEquipment();
+}

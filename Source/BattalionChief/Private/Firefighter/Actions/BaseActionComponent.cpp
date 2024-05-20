@@ -31,4 +31,3 @@ void UBaseActionComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 
 	// ...
 }
-

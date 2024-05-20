@@ -32,3 +32,17 @@ void UUseToolComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 	// ...
 }
 
+void UUseToolComponent::ExecuteAction()
+{
+	return Super::ExecuteAction();
+}
+
+bool UUseToolComponent::CanActionBeCompleted() const
+{
+	return Super::CanActionBeCompleted();
+}
+
+float UUseToolComponent::ScoreAction()
+{
+	return Super::ScoreAction();
+}

@@ -32,3 +32,17 @@ void UGoToLocationComponent::TickComponent(float DeltaTime, ELevelTick TickType,
 	// ...
 }
 
+void UGoToLocationComponent::ExecuteAction()
+{
+	return Super::ExecuteAction();
+}
+
+bool UGoToLocationComponent::CanActionBeCompleted() const
+{
+	return Super::CanActionBeCompleted();
+}
+
+float UGoToLocationComponent::ScoreAction()
+{
+	return Super::ScoreAction();
+}

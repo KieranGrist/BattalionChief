@@ -32,3 +32,18 @@ void UBreakWindowComponent::TickComponent(float DeltaTime, ELevelTick TickType, 
 	// ...
 }
 
+void UBreakWindowComponent::ExecuteAction()
+{
+	return Super::ExecuteAction();
+}
+
+bool UBreakWindowComponent::CanActionBeCompleted() const
+{
+	return Super::CanActionBeCompleted();
+}
+
+float UBreakWindowComponent::ScoreAction()
+{
+	return Super::ScoreAction();
+}
+

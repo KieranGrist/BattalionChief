@@ -25,3 +25,17 @@ void ATurnoutGear::Tick(float DeltaTime)
 
 }
 
+void ATurnoutGear::UseEquipment()
+{
+	return Super::UseEquipment();
+}
+
+bool ATurnoutGear::CanUseEquipment() const
+{
+	return Super::CanUseEquipment();
+}
+
+float ATurnoutGear::ScoreEquipment() const
+{
+	return Super::ScoreEquipment();
+}

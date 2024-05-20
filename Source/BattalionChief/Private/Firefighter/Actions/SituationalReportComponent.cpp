@@ -32,3 +32,17 @@ void USituationalReportComponent::TickComponent(float DeltaTime, ELevelTick Tick
 	// ...
 }
 
+void USituationalReportComponent::ExecuteAction()
+{
+	return Super::ExecuteAction();
+}
+
+bool USituationalReportComponent::CanActionBeCompleted() const
+{
+	return Super::CanActionBeCompleted();
+}
+
+float USituationalReportComponent::ScoreAction()
+{
+	return Super::ScoreAction();
+}

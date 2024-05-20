@@ -23,8 +23,11 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	// Executes the action
-	virtual void ExecuteAction() PURE_VIRTUAL(ABaseObjectActor::ExecuteAction, );
+	virtual void ExecuteAction() override;
 
 	// Checks if the action can be done
-	virtual bool CanActionBeCompleted() const PURE_VIRTUAL(ABaseObjectActor::CanActionBeCompleted, return false;);
+	virtual bool CanActionBeCompleted() const override;
+
+	// Returns an evaluated score of how good this action is, to be used by captains. 
+	virtual float ScoreAction() override;
 };

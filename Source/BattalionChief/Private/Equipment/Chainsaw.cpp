@@ -25,3 +25,17 @@ void AChainsaw::Tick(float DeltaTime)
 
 }
 
+void AChainsaw::UseEquipment()
+{
+	return Super::UseEquipment();
+}
+
+bool AChainsaw::CanUseEquipment() const
+{
+	return Super::CanUseEquipment();
+}
+
+float AChainsaw::ScoreEquipment() const
+{
+	return Super::ScoreEquipment();
+}

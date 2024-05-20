@@ -25,3 +25,17 @@ void ANozzle::Tick(float DeltaTime)
 
 }
 
+void ANozzle::UseEquipment()
+{
+	return Super::UseEquipment();
+}
+
+bool ANozzle::CanUseEquipment() const
+{
+	return Super::CanUseEquipment();
+}
+
+float ANozzle::ScoreEquipment() const
+{
+	return Super::ScoreEquipment();
+}

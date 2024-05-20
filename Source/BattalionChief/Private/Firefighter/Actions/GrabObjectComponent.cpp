@@ -32,3 +32,17 @@ void UGrabObjectComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	// ...
 }
 
+void UGrabObjectComponent::ExecuteAction()
+{
+	return Super::ExecuteAction();
+}
+
+bool UGrabObjectComponent::CanActionBeCompleted() const
+{
+	return Super::CanActionBeCompleted();
+}
+
+float UGrabObjectComponent::ScoreAction()
+{
+	return Super::ScoreAction();
+}

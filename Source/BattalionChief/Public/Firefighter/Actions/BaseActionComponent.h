@@ -28,7 +28,6 @@ public:
 	// Checks if the action can be done
 	virtual bool CanActionBeCompleted() const PURE_VIRTUAL(ABaseObjectActor::CanActionBeCompleted, return false;);
 
-	virtual float ScoreAction() PURE_VIRTUAL(ABaseObjectActor::ExecuteAction, return -1; );
-
-	//TODO: MOVE TO COMPONENT
+	// Returns an evaluated score of how good this action is, to be used by captains. 
+	virtual float ScoreAction() PURE_VIRTUAL(ABaseObjectActor::ScoreAction, return -1; );
 };

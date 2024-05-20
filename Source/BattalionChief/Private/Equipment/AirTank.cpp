@@ -25,3 +25,18 @@ void AAirTank::Tick(float DeltaTime)
 
 }
 
+void AAirTank::UseEquipment()
+{
+	return Super::UseEquipment();
+}
+
+bool AAirTank::CanUseEquipment() const
+{
+	return Super::CanUseEquipment();
+}
+
+float AAirTank::ScoreEquipment() const
+{
+	return Super::ScoreEquipment();
+}
+

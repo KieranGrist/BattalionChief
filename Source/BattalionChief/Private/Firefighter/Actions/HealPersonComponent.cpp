@@ -32,3 +32,17 @@ void UHealPersonComponent::TickComponent(float DeltaTime, ELevelTick TickType, F
 	// ...
 }
 
+void UHealPersonComponent::ExecuteAction()
+{
+	return Super::ExecuteAction();
+}
+
+bool UHealPersonComponent::CanActionBeCompleted() const
+{
+	return Super::CanActionBeCompleted();
+}
+
+float UHealPersonComponent::ScoreAction()
+{
+	return Super::ScoreAction();
+}
