@@ -6,13 +6,15 @@
 #include "BaseEquipmentActor.h"
 #include "ExtinguisherTypes/ExtinguisherProjectile.h"
 #include "ExtinguisherTypes/BaseExtinguisherTypeComponent.h" // Assuming you have a base component for extinguisher types
+#include "Logging/LogMacros.h"
 #include "FireExtinguisher.generated.h"
+
+DECLARE_LOG_CATEGORY_EXTERN(LogFireExtinguisher, Log, All);
 
 UCLASS()
 class BATTALIONCHIEF_API AFireExtinguisher : public ABaseEquipmentActor
 {
     GENERATED_BODY()
-
 public:
     // Sets default values for this actor's properties
     AFireExtinguisher();
@@ -30,7 +32,7 @@ public:
     virtual bool CanUseEquipment() const override;
 
     // Returns a score for the equipment based on situation, used by captains
-    virtual float ScoreEquipment() const  override;
+    virtual float ScoreEquipment() const override;
 
     UFUNCTION(BlueprintCallable, CallInEditor, Category = "Spray")
     void Spray();
@@ -71,10 +73,10 @@ protected:
     float SprayMaxAngle = 45.0f; 
 
     UPROPERTY(EditAnywhere, Category = "Spray")
-    int ProjectilesPerSpray = 10;
+    int ProjectilesPerSpray = 30;
 
     UPROPERTY(EditAnywhere, Category = "Spray")
-    float VelocityMultiplier = 100;
+    float VelocityMultiplier = 10;
 
     UPROPERTY(EditAnywhere, Category = "Spray|Debug")
     FVector Origin;

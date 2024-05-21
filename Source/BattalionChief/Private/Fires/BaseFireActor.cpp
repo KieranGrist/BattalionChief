@@ -1,126 +1,128 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 #include "Fires/BaseFireActor.h"
+#include "Kismet/KismetMathLibrary.h"
+#include "Components/BoxComponent.h"
+#include "Components/AudioComponent.h"
+#include "Particles/ParticleSystemComponent.h"
+#include "Engine/World.h"
+#include "DrawDebugHelpers.h"
+
+DEFINE_LOG_CATEGORY(LogFire);
 
 // Sets default values
 ABaseFireActor::ABaseFireActor()
 {
-	// Set this actor to call Tick() every frame.
-	PrimaryActorTick.bCanEverTick = true;
+    // Set this actor to call Tick() every frame.
+    PrimaryActorTick.bCanEverTick = true;
 
-	// Create a scene component and set it as the root component
-	USceneComponent* RootSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootSceneComponent"));
-	SetRootComponent(RootSceneComponent);
+    // Create a scene component and set it as the root component
+    USceneComponent* root_scene_component = CreateDefaultSubobject<USceneComponent>(TEXT("RootSceneComponent"));
+    SetRootComponent(root_scene_component);
 
-	// Create the hitbox component
-	HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBox"));
-	HitBox->SetupAttachment(RootComponent);;
-	//SetRootComponent(HitBox);
+    // Create the hitbox component
+    HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBox"));
+    HitBox->SetupAttachment(RootComponent);
+    HitBox->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+    HitBox->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
+    HitBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+    HitBox->SetGenerateOverlapEvents(true);
+    HitBox->SetNotifyRigidBodyCollision(true);
 
-	// Initialize other components
-	FireParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("FireParticles"));
-	FireParticles->SetupAttachment(RootComponent);
+    // Initialize other components
+    FireParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("FireParticles"));
+    FireParticles->SetupAttachment(RootComponent);
 
-	FireSound = CreateDefaultSubobject<UAudioComponent>(TEXT("FireSound"));
-	FireSound->SetupAttachment(RootComponent);
+    FireSound = CreateDefaultSubobject<UAudioComponent>(TEXT("FireSound"));
+    FireSound->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
 void ABaseFireActor::BeginPlay()
 {
-	Super::BeginPlay();
-
+    Super::BeginPlay();
 }
 
 // Called every frame
 void ABaseFireActor::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
-	Burn();
-	Spread();
-	UpdateEffects();
+    Super::Tick(DeltaTime);
+    Burn();
+    Spread();
+    UpdateEffects();
 }
 
 // Function to spread the fire
 void ABaseFireActor::Spread()
 {
-	// Implement fire spreading logic
+    // Implement fire spreading logic
 }
 
 // Function to simulate burning
 void ABaseFireActor::Burn()
 {
-	// Implement burning logic, like reducing the health of the burning object
-	ApplyDamage();
+    // Implement burning logic, like reducing the health of the burning object
+    ApplyDamage();
 }
 
 // Function called when the fire is hit by an object containing extinguisher info
 void ABaseFireActor::Extinguish(UBaseExtinguisherTypeComponent* InBaseExtinguisherTypeComponent)
 {
-	float* value = HelpfulExtinguisherTypesMap.Find(InBaseExtinguisherTypeComponent->GetClass());
-	if (value)
-	{
-		Health -= InBaseExtinguisherTypeComponent->GetExtinguishPower() * *value;
-		if (Health <= 0)
-		{
-			Destroy();
-		}
-	}
-	value = HinderingExtinguisherTypesMap.Find(InBaseExtinguisherTypeComponent->GetClass());
-	if (value)
-	{
-		Health += InBaseExtinguisherTypeComponent->GetExtinguishPower() * *value;
-		Spread();
-	}
+    float* efficiency = HelpfulExtinguisherTypesMap.Find(InBaseExtinguisherTypeComponent->GetClass());
+    if (efficiency)
+    {
+        float starting_health = Health;
+        Health -= InBaseExtinguisherTypeComponent->GetExtinguishPower() * *efficiency;
+        float ending_health = Health;
+        float health_loss = starting_health - ending_health;
+
+        UE_LOG(LogFire, Verbose,
+            TEXT("ABaseFireActor::Extinguish    InBaseExtinguisherTypeComponentClass: %s is HELPFUL, efficiency: %f, GetExtinguishPower: %f, Starting Health: %f, Ending Health: %f, Health Loss: %f"),
+            *InBaseExtinguisherTypeComponent->GetClass()->GetName(), *efficiency, InBaseExtinguisherTypeComponent->GetExtinguishPower(), starting_health, ending_health, health_loss);
+
+        if (Health <= 0)
+        {
+            Destroy();
+        }
+    }
+
+    efficiency = HinderingExtinguisherTypesMap.Find(InBaseExtinguisherTypeComponent->GetClass());
+    if (efficiency)
+    {
+        float starting_health = Health;
+        Health += InBaseExtinguisherTypeComponent->GetExtinguishPower() * *efficiency;
+        float ending_health = Health;
+        float health_gain = ending_health - starting_health;
+
+        UE_LOG(LogFire, Verbose,
+            TEXT("ABaseFireActor::Extinguish    InBaseExtinguisherTypeComponentClass: %s is HINDERING, efficiency: %f, GetExtinguishPower: %f, Starting Health: %f, Ending Health: %f, Health Gain: %f"),
+            *InBaseExtinguisherTypeComponent->GetClass()->GetName(), *efficiency, InBaseExtinguisherTypeComponent->GetExtinguishPower(), starting_health, ending_health, health_gain);
+
+        Spread();
+    }
 }
 
-void ABaseFireActor::NotifyActorBeginOverlap(AActor* OtherActor)
+void ABaseFireActor::NotifyHit(UPrimitiveComponent* MyComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
 {
-	Super::NotifyActorBeginOverlap(OtherActor);
-
-	if (OtherActor && OtherActor != this)
-	{
-		// Print a message to the screen
-		if (GEngine)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Overlap Begin with %s"), *OtherActor->GetName()));
-		}
-
-		// Additional overlap handling logic can go here
-	}
+    Super::NotifyHit(MyComp, OtherActor, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
 }
 
-void ABaseFireActor::NotifyActorEndOverlap(AActor* OtherActor)
-{
-	Super::NotifyActorEndOverlap(OtherActor);
-
-	if (OtherActor && OtherActor != this)
-	{
-		// Print a message to the screen
-		if (GEngine)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Overlap End with %s"), *OtherActor->GetName()));
-		}
-
-		// Additional overlap handling logic can go here
-	}
-}
 // Function to calculate damage to burning objects
 float ABaseFireActor::CalculateDamage()
 {
-	return Heat * Intensity * GetWorld()->GetDeltaSeconds();
+    return Heat * Intensity * GetWorld()->GetDeltaSeconds();
 }
 
 // Apply damage to burning objects
 void ABaseFireActor::ApplyDamage()
 {
-	if (BurningObject)
-	{
-		BurningObject->ApplyDamage(CalculateDamage());
-	}
+    if (BurningObject)
+    {
+        BurningObject->ApplyDamage(CalculateDamage());
+    }
 }
 
 // Function to update visual and audio effects
 void ABaseFireActor::UpdateEffects()
 {
-	// Update particle and sound effects based on fire intensity, heat, and other properties
+    // Update particle and sound effects based on fire intensity, heat, and other properties
 }

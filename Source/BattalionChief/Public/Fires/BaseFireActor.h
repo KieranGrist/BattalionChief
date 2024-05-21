@@ -9,7 +9,10 @@
 #include "Components/BoxComponent.h"
 #include "ExtinguisherTypes/BaseExtinguisherTypeComponent.h"
 #include "Objects/BaseObjectActor.h"
+#include "Logging/LogMacros.h"
 #include "BaseFireActor.generated.h"
+
+DECLARE_LOG_CATEGORY_EXTERN(LogFire, Log, All);
 
 UCLASS()
 class BATTALIONCHIEF_API ABaseFireActor : public AActor
@@ -35,9 +38,7 @@ public:
 	// Function called when the fire is hit by an object containing extinguisher info
 	virtual void Extinguish(UBaseExtinguisherTypeComponent* InBaseExtinguisherTypeComponent);
 
-	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
-
-	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
+	virtual void NotifyHit(class UPrimitiveComponent* MyComp, AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
 
 	// Function to calculate damage to burning objects
 	virtual float CalculateDamage();

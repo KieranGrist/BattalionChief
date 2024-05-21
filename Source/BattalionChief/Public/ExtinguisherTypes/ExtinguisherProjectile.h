@@ -4,8 +4,10 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/StaticMeshComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Components/AudioComponent.h"
+#include "ExtinguisherTypes/BaseExtinguisherTypeComponent.h"
 #include "ExtinguisherProjectile.generated.h"
 
 UCLASS()
@@ -23,20 +25,22 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	virtual void NotifyHit(class UPrimitiveComponent* MyComp, AActor* OtherActor, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
 
-	virtual void NotifyActorEndOverlap(AActor* OtherActor) override;
+	void CreateExtinguisherTypeComponent(const TSubclassOf<UBaseExtinguisherTypeComponent>& InBaseExtinguisherTypeComponentClass);
 
 	// Static mesh component for equipment model
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Extinguisher Projectile")
 	UStaticMeshComponent* ExtinguisherProjectileMesh;
 
 protected:
+	UBaseExtinguisherTypeComponent* ExtinguisherType;
+
 	UPROPERTY(VisibleAnywhere, Category = "Extinguisher Projectile")
 	float LifeTime;
 
 	UPROPERTY(VisibleAnywhere, Category = "Extinguisher Projectile")
-	float MaxLifeTime = 300;
+	float MaxLifeTime = 30;
 
 	// Sound component for sound effects
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Extinguisher Projectile")

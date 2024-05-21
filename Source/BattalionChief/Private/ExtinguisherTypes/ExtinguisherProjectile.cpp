@@ -2,30 +2,34 @@
 
 #include "ExtinguisherTypes/ExtinguisherProjectile.h"
 #include "Objects/BaseObjectActor.h"
+#include "Fires/BaseFireActor.h"
+#include "Equipment/FireExtinguisher.h"
 
 // Sets default values
 AExtinguisherProjectile::AExtinguisherProjectile()
 {
-	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+
 	PrimaryActorTick.bCanEverTick = true;
 
-	// Create a scene component and set it as the root component
-	//USceneComponent* RootSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootSceneComponent"));
-	//SetRootComponent(RootSceneComponent);
-
-	// Create the static mesh component
 	ExtinguisherProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ExtinguisherProjectileMesh"));
-	SetRootComponent(ExtinguisherProjectileMesh);
 	ExtinguisherProjectileMesh->SetSimulatePhysics(true);
+	ExtinguisherProjectileMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	ExtinguisherProjectileMesh->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
+	ExtinguisherProjectileMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+	ExtinguisherProjectileMesh->SetGenerateOverlapEvents(true);
+	ExtinguisherProjectileMesh->SetNotifyRigidBodyCollision(true);
+
+	SetRootComponent(ExtinguisherProjectileMesh);
+
 	//ExtinguisherProjectileMesh->SetupAttachment(RootComponent);
 
 	// Create the audio component
 	ExtinguisherProjectileSound = CreateDefaultSubobject<UAudioComponent>(TEXT("ExtinguisherProjectileSound"));
-	ExtinguisherProjectileSound->SetupAttachment(ExtinguisherProjectileMesh);
+	ExtinguisherProjectileSound->SetupAttachment(RootComponent);
 
 	// Create the particle system component
 	ExtinguisherProjectileParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("ExtinguisherProjectileParticles"));
-	ExtinguisherProjectileParticles->SetupAttachment(ExtinguisherProjectileMesh);
+	ExtinguisherProjectileParticles->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -48,42 +52,37 @@ void AExtinguisherProjectile::Tick(float DeltaTime)
 	}
 }
 
-void AExtinguisherProjectile::NotifyActorBeginOverlap(AActor* OtherActor)
+void AExtinguisherProjectile::NotifyHit(UPrimitiveComponent* MyComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
 {
-	Super::NotifyActorBeginOverlap(OtherActor);
+	Super::NotifyHit(MyComp, OtherActor, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
 
 	if (OtherActor && OtherActor != this)
 	{
-		ABaseObjectActor* BaseObjectActor = Cast<ABaseObjectActor>(OtherActor);
+		ABaseObjectActor* hit_object = Cast<ABaseObjectActor>(OtherActor);
+		ABaseFireActor * hit_fire = Cast<ABaseFireActor>(OtherActor);
 
-
+		FString debug_message = FString::Printf(TEXT("AExtinguisherProjectile::NotifyHit	%s has been hit by %s"), *GetName(), *OtherActor->GetName());
+		UE_LOG(LogFireExtinguisher, Verbose, TEXT("%s"), *debug_message);
 		// Print a message to the screen
 		if (GEngine)
 		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Overlap Begin with %s"), *OtherActor->GetName()));
+			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, debug_message);
 		}
 
-		// Additional overlap handling logic can go here
+		if (hit_object)
+		{
+
+		}
+
+		if (hit_fire)
+		{
+			hit_fire->Extinguish(ExtinguisherType);
+		}
 	}
 }
 
-
-void AExtinguisherProjectile::NotifyActorEndOverlap(AActor* OtherActor)
+void AExtinguisherProjectile::CreateExtinguisherTypeComponent(const TSubclassOf<UBaseExtinguisherTypeComponent>& InBaseExtinguisherTypeComponentClass)
 {
-	Super::NotifyActorEndOverlap(OtherActor);
-
-	if (OtherActor && OtherActor != this)
-	{
-		ABaseObjectActor* BaseObjectActor = Cast<ABaseObjectActor>(OtherActor);
-
-
-
-		// Print a message to the screen
-		if (GEngine)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, FString::Printf(TEXT("Overlap End with %s"), *OtherActor->GetName()));
-		}
-
-		// Additional overlap handling logic can go here
-	}
+	ExtinguisherType = NewObject<UBaseExtinguisherTypeComponent>(this, InBaseExtinguisherTypeComponentClass);
 }
+

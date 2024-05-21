@@ -13,9 +13,10 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "Logging/LogMacros.h"
 #include "BaseCharacter.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogBaseCharacter, Log, All);
 
 UCLASS(config = Game)
 class ABaseCharacter : public ACharacter
