@@ -10,7 +10,6 @@
 #include "Logging/LogMacros.h"
 #include "BaseFireComponent.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogFire, Log, All);
 
 class ABaseObjectActor;
 

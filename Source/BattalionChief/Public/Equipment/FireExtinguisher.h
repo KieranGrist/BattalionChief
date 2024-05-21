@@ -9,8 +9,6 @@
 #include "Logging/LogMacros.h"
 #include "FireExtinguisher.generated.h"
 
-DECLARE_LOG_CATEGORY_EXTERN(LogFireExtinguisher, Log, All);
-
 UCLASS()
 class BATTALIONCHIEF_API AFireExtinguisher : public ABaseEquipmentActor
 {

@@ -10,6 +10,7 @@
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnObjectDestroyedSignature, ABaseObjectActor*, DestroyedObject);
 
 DECLARE_LOG_CATEGORY_EXTERN(LogFireExtinguisher, Log, All);
+DECLARE_LOG_CATEGORY_EXTERN(LogFire, Log, All);
 
 UCLASS()
 class BATTALIONCHIEF_API ABaseObjectActor : public AActor

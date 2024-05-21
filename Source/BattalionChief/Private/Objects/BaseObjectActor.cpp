@@ -2,6 +2,8 @@
 
 
 #include "Objects/BaseObjectActor.h"
+DEFINE_LOG_CATEGORY(LogFireExtinguisher);
+DEFINE_LOG_CATEGORY(LogFire);
 
 // Sets default values
 ABaseObjectActor::ABaseObjectActor() : AActor()

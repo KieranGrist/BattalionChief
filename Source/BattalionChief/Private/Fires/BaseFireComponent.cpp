@@ -5,9 +5,6 @@
 #include "Engine/World.h"
 #include "DrawDebugHelpers.h"
 
-
-DEFINE_LOG_CATEGORY(LogFire);
-
 // Sets default values
 UBaseFireComponent::UBaseFireComponent()
 {

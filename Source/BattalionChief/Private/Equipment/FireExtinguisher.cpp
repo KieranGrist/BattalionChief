@@ -5,8 +5,6 @@
 #include "ExtinguisherTypes/ExtinguisherProjectile.h"
 #include "Components/SceneComponent.h"
 
-DEFINE_LOG_CATEGORY(LogFireExtinguisher);
-
 // Sets default values
 AFireExtinguisher::AFireExtinguisher() : ABaseEquipmentActor()
 {
