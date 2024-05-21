@@ -45,6 +45,10 @@ float AFireExtinguisher::ScoreEquipment() const
 
 void AFireExtinguisher::Spray()
 {
+	if (IsTankEmpty())
+		return;
+
+	CurrentTankLevel -= ConsumptionRate;
 	Origin = ProjectileSpawn->GetComponentLocation();
 	Direction = GetActorForwardVector();
 	UWorld* world = GetWorld();
@@ -94,7 +98,7 @@ void AFireExtinguisher::FillTank()
 
 bool AFireExtinguisher::IsTankEmpty() const
 {
-	return CurrentTankLevel <= TankCapacity;
+	return CurrentTankLevel <= 0;
 }
 
 void AFireExtinguisher::LaunchProjectile(AExtinguisherProjectile* InProjectile, const FVector& InVector)

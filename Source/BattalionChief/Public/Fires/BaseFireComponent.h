@@ -15,19 +15,29 @@
 DECLARE_LOG_CATEGORY_EXTERN(LogFire, Log, All);
 
 UCLASS()
-class BATTALIONCHIEF_API ABaseFireActor : public AActor
+class BATTALIONCHIEF_API UBaseFireComponent : public USceneComponent
 {
 	GENERATED_BODY()
 
 public:
 	// Sets default values for this actor's properties
-	ABaseFireActor();
+	UBaseFireComponent();
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	virtual void CalculateHeat();
+	
+	virtual void CalculateIntensity();
+
+	virtual void CalculateSpreadRadius();
+
+	virtual void CalculateSpreadRate();
+
+	virtual void CalculateHealth();
 
 	// Function to spread the fire
 	virtual void Spread();
@@ -48,12 +58,10 @@ public:
 
 	// Function to update visual and audio effects
 	void UpdateEffects();
-
+	
+	// Function to Attach the fire to its parent object
+	void AttachToObject(ABaseObjectActor* InObjectActor);
 protected:
-	// Hitbox for fire
-	UPROPERTY(EditAnywhere, Category = "Fire Properties")
-	UBoxComponent* HitBox;
-
 	// Particle system for visual representation of fire
 	UPROPERTY(EditAnywhere, Category = "Fire Properties")
 	UParticleSystemComponent* FireParticles;

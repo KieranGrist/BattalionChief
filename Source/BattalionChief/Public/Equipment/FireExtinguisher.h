@@ -38,7 +38,8 @@ public:
     void Spray();
 
     void SpawnProjectile();
-
+   
+    UFUNCTION(BlueprintCallable, CallInEditor, Category = "Extinguisher")
     void FillTank();
 
     bool IsTankEmpty() const;

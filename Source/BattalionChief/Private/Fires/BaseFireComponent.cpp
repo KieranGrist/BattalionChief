@@ -10,40 +10,36 @@
 DEFINE_LOG_CATEGORY(LogFire);
 
 // Sets default values
-ABaseFireActor::ABaseFireActor()
+UBaseFireComponent::UBaseFireComponent()
 {
     // Set this actor to call Tick() every frame.
     PrimaryActorTick.bCanEverTick = true;
 
     // Create a scene component and set it as the root component
-    USceneComponent* root_scene_component = CreateDefaultSubobject<USceneComponent>(TEXT("RootSceneComponent"));
-    SetRootComponent(root_scene_component);
+ //   USceneComponent* root_scene_component = CreateDefaultSubobject<USceneComponent>(TEXT("RootSceneComponent"));
+  //  SetRootComponent(root_scene_component);
 
     // Create the hitbox component
     HitBox = CreateDefaultSubobject<UBoxComponent>(TEXT("HitBox"));
-    HitBox->SetupAttachment(RootComponent);
-    HitBox->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-    HitBox->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
-    HitBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-    HitBox->SetGenerateOverlapEvents(true);
-    HitBox->SetNotifyRigidBodyCollision(true);
+    HitBox->SetupAttachment(this);
+
 
     // Initialize other components
     FireParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("FireParticles"));
-    FireParticles->SetupAttachment(RootComponent);
+    FireParticles->SetupAttachment(this);
 
     FireSound = CreateDefaultSubobject<UAudioComponent>(TEXT("FireSound"));
-    FireSound->SetupAttachment(RootComponent);
+    FireSound->SetupAttachment(this);
 }
 
 // Called when the game starts or when spawned
-void ABaseFireActor::BeginPlay()
+void UBaseFireComponent::BeginPlay()
 {
     Super::BeginPlay();
 }
 
 // Called every frame
-void ABaseFireActor::Tick(float DeltaTime)
+void UBaseFireComponent::Tick(float DeltaTime)
 {
     Super::Tick(DeltaTime);
     Burn();
@@ -51,21 +47,41 @@ void ABaseFireActor::Tick(float DeltaTime)
     UpdateEffects();
 }
 
+void UBaseFireComponent::CalculateHeat()
+{
+}
+
+void UBaseFireComponent::CalculateIntensity()
+{
+}
+
+void UBaseFireComponent::CalculateSpreadRadius()
+{
+}
+
+void UBaseFireComponent::CalculateSpreadRate()
+{
+}
+
+void UBaseFireComponent::CalculateHealth()
+{
+}
+
 // Function to spread the fire
-void ABaseFireActor::Spread()
+void UBaseFireComponent::Spread()
 {
     // Implement fire spreading logic
 }
 
 // Function to simulate burning
-void ABaseFireActor::Burn()
+void UBaseFireComponent::Burn()
 {
     // Implement burning logic, like reducing the health of the burning object
     ApplyDamage();
 }
 
 // Function called when the fire is hit by an object containing extinguisher info
-void ABaseFireActor::Extinguish(UBaseExtinguisherTypeComponent* InBaseExtinguisherTypeComponent)
+void UBaseFireComponent::Extinguish(UBaseExtinguisherTypeComponent* InBaseExtinguisherTypeComponent)
 {
     float* efficiency = HelpfulExtinguisherTypesMap.Find(InBaseExtinguisherTypeComponent->GetClass());
     if (efficiency)
@@ -101,19 +117,19 @@ void ABaseFireActor::Extinguish(UBaseExtinguisherTypeComponent* InBaseExtinguish
     }
 }
 
-void ABaseFireActor::NotifyHit(UPrimitiveComponent* MyComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
+void UBaseFireComponent::NotifyHit(UPrimitiveComponent* MyComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit)
 {
     Super::NotifyHit(MyComp, OtherActor, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
 }
 
 // Function to calculate damage to burning objects
-float ABaseFireActor::CalculateDamage()
+float UBaseFireComponent::CalculateDamage()
 {
     return Heat * Intensity * GetWorld()->GetDeltaSeconds();
 }
 
 // Apply damage to burning objects
-void ABaseFireActor::ApplyDamage()
+void UBaseFireComponent::ApplyDamage()
 {
     if (BurningObject)
     {
@@ -122,7 +138,7 @@ void ABaseFireActor::ApplyDamage()
 }
 
 // Function to update visual and audio effects
-void ABaseFireActor::UpdateEffects()
+void UBaseFireComponent::UpdateEffects()
 {
     // Update particle and sound effects based on fire intensity, heat, and other properties
 }

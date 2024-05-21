@@ -7,7 +7,7 @@
 #include "Smoke.generated.h"
 
 UCLASS()
-class BATTALIONCHIEF_API ASmoke : public ABaseFireActor
+class BATTALIONCHIEF_API ASmoke : public UBaseFireComponent
 {
 	GENERATED_BODY()
 	

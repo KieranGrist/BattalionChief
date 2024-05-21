@@ -7,6 +7,8 @@
 // Event dispatcher to notify when the object is destroyed
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnObjectDestroyedSignature, ABaseObjectActor*, DestroyedObject);
 
+DECLARE_LOG_CATEGORY_EXTERN(LogFireExtinguisher, Log, All);
+
 UCLASS()
 class BATTALIONCHIEF_API ABaseObjectActor : public AActor
 {
@@ -28,19 +30,28 @@ public:
 
 	// Function to ignite the object with a specific fire
 	UFUNCTION(BlueprintCallable, Category = "Object")
-	void Ignite(ABaseFireActor* InFire);
+	void Ignite(UBaseFireComponent* InFire);
 
 	UFUNCTION(BlueprintCallable, Category = "Object")
-	void UpdateSelfIgnitionChance();
+	void CalculateTemperature();
 
-	// Function called when the object is destroyed by fire
-	UFUNCTION(BlueprintImplementableEvent, Category = "Object")
-	void OnObjectDestroyed_BP();
+	UFUNCTION(BlueprintCallable, Category = "Object")
+	void CalculateFlambility();
+
+	UFUNCTION(BlueprintCallable, Category = "Object")
+	void CalculateSelfIgnitionChance();
+
+	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Object")
+	void SelfIgnite();
 
 	// Event dispatcher to notify when the object is destroyed
 	UPROPERTY(BlueprintAssignable, Category = "Object")
 	FOnObjectDestroyedSignature OnObjectDestroyed;
 protected:
+	// Static mesh component for equipment model
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Equipment")
+	UStaticMeshComponent* ObjectMesh;
+
 	// Health of the object
 	UPROPERTY(EditAnywhere, Category = "Object")
 	float Health;
@@ -63,5 +74,5 @@ protected:
 
 	// What Fire This Object Creates
 	UPROPERTY(EditAnywhere, Category = "Object")
-	TSubclassOf<ABaseFireActor> FireType;
+	TSubclassOf<UBaseFireComponent> FireType;
 };

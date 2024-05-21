@@ -10,7 +10,7 @@
  * 
  */
 UCLASS()
-class BATTALIONCHIEF_API AClassAFire : public ABaseFireActor
+class BATTALIONCHIEF_API AClassAFire : public UBaseFireComponent
 {
 	GENERATED_BODY()
 

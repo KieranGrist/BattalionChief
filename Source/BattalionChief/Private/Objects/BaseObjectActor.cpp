@@ -11,6 +11,13 @@ ABaseObjectActor::ABaseObjectActor()
 
 	// Set default health
 	Health = 100.0f;
+
+
+	HitBox->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	HitBox->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
+	HitBox->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+	HitBox->SetGenerateOverlapEvents(true);
+	HitBox->SetNotifyRigidBodyCollision(true);
 }
 
 // Called when the game starts or when spawned
@@ -36,11 +43,30 @@ void ABaseObjectActor::ApplyDamage(float DamageAmount)
 	}
 }
 
-void ABaseObjectActor::Ignite(ABaseFireActor* InFire)
+void ABaseObjectActor::Ignite(UBaseFireComponent* InFire)
 {
 
 }
 
-void ABaseObjectActor::UpdateSelfIgnitionChance()
+void ABaseObjectActor::CalculateTemperature()
 {
 }
+
+void ABaseObjectActor::CalculateFlambility()
+{
+}
+
+void ABaseObjectActor::CalculateSelfIgnitionChance()
+{
+}
+
+void ABaseObjectActor::SelfIgnite()
+{
+	// Spawn the projectile
+	FActorSpawnParameters spawn_params;
+	spawn_params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+	UBaseFireComponent* spawned_fire = GetWorld()->SpawnActor<UBaseFireComponent>(FireType, GetActorLocation(), FRotator::ZeroRotator, spawn_params);
+
+		
+}
+

@@ -60,7 +60,7 @@ void AExtinguisherProjectile::NotifyHit(UPrimitiveComponent* MyComp, AActor* Oth
 		return;
 
 	ABaseObjectActor* hit_object = Cast<ABaseObjectActor>(OtherActor);
-	ABaseFireActor* hit_fire = Cast<ABaseFireActor>(OtherActor);
+	UBaseFireComponent* hit_fire = Cast<UBaseFireComponent>(OtherActor);
 	AExtinguisherProjectile* hit_projectile = Cast<AExtinguisherProjectile>(OtherActor);
 	if (hit_projectile)
 		return;
