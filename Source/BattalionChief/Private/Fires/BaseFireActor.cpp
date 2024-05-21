@@ -75,7 +75,7 @@ void ABaseFireActor::Extinguish(UBaseExtinguisherTypeComponent* InBaseExtinguish
         float ending_health = Health;
         float health_loss = starting_health - ending_health;
 
-        UE_LOG(LogFire, Verbose,
+        UE_LOG(LogFire, Log,
             TEXT("ABaseFireActor::Extinguish    InBaseExtinguisherTypeComponentClass: %s is HELPFUL, efficiency: %f, GetExtinguishPower: %f, Starting Health: %f, Ending Health: %f, Health Loss: %f"),
             *InBaseExtinguisherTypeComponent->GetClass()->GetName(), *efficiency, InBaseExtinguisherTypeComponent->GetExtinguishPower(), starting_health, ending_health, health_loss);
 
@@ -93,7 +93,7 @@ void ABaseFireActor::Extinguish(UBaseExtinguisherTypeComponent* InBaseExtinguish
         float ending_health = Health;
         float health_gain = ending_health - starting_health;
 
-        UE_LOG(LogFire, Verbose,
+        UE_LOG(LogFire, Log,
             TEXT("ABaseFireActor::Extinguish    InBaseExtinguisherTypeComponentClass: %s is HINDERING, efficiency: %f, GetExtinguishPower: %f, Starting Health: %f, Ending Health: %f, Health Gain: %f"),
             *InBaseExtinguisherTypeComponent->GetClass()->GetName(), *efficiency, InBaseExtinguisherTypeComponent->GetExtinguishPower(), starting_health, ending_health, health_gain);
 

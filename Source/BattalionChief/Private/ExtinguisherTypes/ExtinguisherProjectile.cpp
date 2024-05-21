@@ -36,14 +36,14 @@ AExtinguisherProjectile::AExtinguisherProjectile()
 void AExtinguisherProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
 void AExtinguisherProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	LifeTime+=DeltaTime;
+	LifeTime += DeltaTime;
 
 	// Check if the lifetime exceeds the maximum allowed time
 	if (LifeTime > MaxLifeTime)
@@ -56,29 +56,30 @@ void AExtinguisherProjectile::NotifyHit(UPrimitiveComponent* MyComp, AActor* Oth
 {
 	Super::NotifyHit(MyComp, OtherActor, OtherComp, bSelfMoved, HitLocation, HitNormal, NormalImpulse, Hit);
 
-	if (OtherActor && OtherActor != this)
+	if (!OtherActor || OtherActor == this)
+		return;
+
+	ABaseObjectActor* hit_object = Cast<ABaseObjectActor>(OtherActor);
+	ABaseFireActor* hit_fire = Cast<ABaseFireActor>(OtherActor);
+	AExtinguisherProjectile* hit_projectile = Cast<AExtinguisherProjectile>(OtherActor);
+	if (hit_projectile)
+		return;
+
+	FString debug_message = FString::Printf(TEXT("AExtinguisherProjectile::NotifyHit    %s has been hit by %s"), *GetName(), *OtherActor->GetName());
+
+	if (hit_object)
 	{
-		ABaseObjectActor* hit_object = Cast<ABaseObjectActor>(OtherActor);
-		ABaseFireActor * hit_fire = Cast<ABaseFireActor>(OtherActor);
+		UE_LOG(LogFireExtinguisher, Log, TEXT("%s"), *debug_message);
 
-		FString debug_message = FString::Printf(TEXT("AExtinguisherProjectile::NotifyHit	%s has been hit by %s"), *GetName(), *OtherActor->GetName());
-		UE_LOG(LogFireExtinguisher, Verbose, TEXT("%s"), *debug_message);
-		// Print a message to the screen
-		if (GEngine)
-		{
-			GEngine->AddOnScreenDebugMessage(-1, 5.0f, FColor::Red, debug_message);
-		}
 
-		if (hit_object)
-		{
-
-		}
-
-		if (hit_fire)
-		{
-			hit_fire->Extinguish(ExtinguisherType);
-		}
 	}
+
+	if (hit_fire)
+	{
+		hit_fire->Extinguish(ExtinguisherType);
+		UE_LOG(LogFireExtinguisher, Log, TEXT("%s"), *debug_message);
+	}
+	Destroy();
 }
 
 void AExtinguisherProjectile::CreateExtinguisherTypeComponent(const TSubclassOf<UBaseExtinguisherTypeComponent>& InBaseExtinguisherTypeComponentClass)
