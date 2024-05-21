@@ -2,28 +2,21 @@
 
 #include "ExtinguisherTypes/ExtinguisherProjectile.h"
 #include "Objects/BaseObjectActor.h"
-#include "Fires/BaseFireActor.h"
+#include "Fires/BaseFireComponent.h"
 #include "Equipment/FireExtinguisher.h"
 
 // Sets default values
-AExtinguisherProjectile::AExtinguisherProjectile()
+AExtinguisherProjectile::AExtinguisherProjectile() : ABaseObjectActor()
 {
-
 	PrimaryActorTick.bCanEverTick = true;
 
-	ExtinguisherProjectileMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ExtinguisherProjectileMesh"));
-	ExtinguisherProjectileMesh->SetSimulatePhysics(true);
-	ExtinguisherProjectileMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	ExtinguisherProjectileMesh->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
-	ExtinguisherProjectileMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-	ExtinguisherProjectileMesh->SetGenerateOverlapEvents(true);
-	ExtinguisherProjectileMesh->SetNotifyRigidBodyCollision(true);
+	ObjectMesh->SetSimulatePhysics(true);
+	ObjectMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	ObjectMesh->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
+	ObjectMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+	ObjectMesh->SetGenerateOverlapEvents(true);
+	ObjectMesh->SetNotifyRigidBodyCollision(true);
 
-	SetRootComponent(ExtinguisherProjectileMesh);
-
-	//ExtinguisherProjectileMesh->SetupAttachment(RootComponent);
-
-	// Create the audio component
 	ExtinguisherProjectileSound = CreateDefaultSubobject<UAudioComponent>(TEXT("ExtinguisherProjectileSound"));
 	ExtinguisherProjectileSound->SetupAttachment(RootComponent);
 

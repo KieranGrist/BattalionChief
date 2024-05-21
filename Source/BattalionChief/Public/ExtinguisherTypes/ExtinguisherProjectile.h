@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Objects/BaseObjectActor.h"
 #include "Components/StaticMeshComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Components/AudioComponent.h"
@@ -11,7 +11,7 @@
 #include "ExtinguisherProjectile.generated.h"
 
 UCLASS()
-class BATTALIONCHIEF_API AExtinguisherProjectile : public AActor
+class BATTALIONCHIEF_API AExtinguisherProjectile : public ABaseObjectActor
 {
 	GENERATED_BODY()
 	
@@ -28,10 +28,6 @@ public:
 	virtual void NotifyHit(class UPrimitiveComponent* MyComp, AActor* OtherActor, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
 
 	void CreateExtinguisherTypeComponent(const TSubclassOf<UBaseExtinguisherTypeComponent>& InBaseExtinguisherTypeComponentClass);
-
-	// Static mesh component for equipment model
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Extinguisher Projectile")
-	UStaticMeshComponent* ExtinguisherProjectileMesh;
 
 protected:
 	UBaseExtinguisherTypeComponent* ExtinguisherType;

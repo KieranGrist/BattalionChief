@@ -3,24 +3,22 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Fires/BaseFireActor.h"
+#include "Fires/BaseFireComponent.h"
 #include "Smoke.generated.h"
 
 UCLASS()
-class BATTALIONCHIEF_API ASmoke : public UBaseFireComponent
+class BATTALIONCHIEF_API USmoke : public UBaseFireComponent
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
-	ASmoke();
+	USmoke();
 
-protected:
-	// Called when the game starts or when spawned
+	// Called when the game starts
 	virtual void BeginPlay() override;
 
-public:	
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 };

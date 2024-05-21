@@ -3,18 +3,18 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Components/SceneComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "Components/AudioComponent.h"
-#include "Components/BoxComponent.h"
 #include "ExtinguisherTypes/BaseExtinguisherTypeComponent.h"
-#include "Objects/BaseObjectActor.h"
 #include "Logging/LogMacros.h"
-#include "BaseFireActor.generated.h"
+#include "BaseFireComponent.generated.h"
 
 DECLARE_LOG_CATEGORY_EXTERN(LogFire, Log, All);
 
-UCLASS()
+class ABaseObjectActor;
+
+UCLASS(ClassGroup = (Custom), meta = (BlueprintSpawnableComponent))
 class BATTALIONCHIEF_API UBaseFireComponent : public USceneComponent
 {
 	GENERATED_BODY()
@@ -23,11 +23,11 @@ public:
 	// Sets default values for this actor's properties
 	UBaseFireComponent();
 
-	// Called when the game starts or when spawned
+	// Called when the game starts
 	virtual void BeginPlay() override;
 
 	// Called every frame
-	virtual void Tick(float DeltaTime) override;
+	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	virtual void CalculateHeat();
 	
@@ -48,8 +48,6 @@ public:
 	// Function called when the fire is hit by an object containing extinguisher info
 	virtual void Extinguish(UBaseExtinguisherTypeComponent* InBaseExtinguisherTypeComponent);
 
-	virtual void NotifyHit(class UPrimitiveComponent* MyComp, AActor* Other, class UPrimitiveComponent* OtherComp, bool bSelfMoved, FVector HitLocation, FVector HitNormal, FVector NormalImpulse, const FHitResult& Hit) override;
-
 	// Function to calculate damage to burning objects
 	virtual float CalculateDamage();
 
@@ -59,8 +57,6 @@ public:
 	// Function to update visual and audio effects
 	void UpdateEffects();
 	
-	// Function to Attach the fire to its parent object
-	void AttachToObject(ABaseObjectActor* InObjectActor);
 protected:
 	// Particle system for visual representation of fire
 	UPROPERTY(EditAnywhere, Category = "Fire Properties")
@@ -88,7 +84,7 @@ protected:
 
 	// The amount of smoke produced by the fire
 	UPROPERTY(EditAnywhere, Category = "Fire Properties")
-	TSubclassOf<class ASmoke> SmokeClass; 
+	TSubclassOf<class USmoke> SmokeClass; 
 
 	// The intensity of the fire
 	UPROPERTY(EditAnywhere, Category = "Fire Properties")

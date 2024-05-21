@@ -8,8 +8,9 @@
 DEFINE_LOG_CATEGORY(LogFireExtinguisher);
 
 // Sets default values
-AFireExtinguisher::AFireExtinguisher()
+AFireExtinguisher::AFireExtinguisher() : ABaseEquipmentActor()
 {
+	PrimaryActorTick.bCanEverTick = true;
 	// Set up the extinguisher type component
 	ExtinguisherTypeComponent = CreateDefaultSubobject<UBaseExtinguisherTypeComponent>(TEXT("ExtinguisherTypeComponent"));
 	ProjectileSpawn = CreateDefaultSubobject<USceneComponent>(TEXT("ProjectileSpawn"));
@@ -104,5 +105,5 @@ bool AFireExtinguisher::IsTankEmpty() const
 void AFireExtinguisher::LaunchProjectile(AExtinguisherProjectile* InProjectile, const FVector& InVector)
 {
 	FVector launch_velocity = InVector * Range * VelocityMultiplier;
-	InProjectile->ExtinguisherProjectileMesh->AddImpulse(launch_velocity, NAME_None, true);
+	InProjectile->ObjectMesh->AddImpulse(launch_velocity, NAME_None, true);
 }

@@ -10,7 +10,7 @@
 #include "ExtinguisherTypes/Water.h"
 #include "ExtinguisherTypes/WetChemical.h"
 
-AClassAFire::AClassAFire()
+UClassAFire::UClassAFire()
 {
     // Initialize the helpful extinguisher types map with their extinguishing percentages
     HelpfulExtinguisherTypesMap.Add(UABCPowder::StaticClass(), 0.9f);              // ABC Powder extinguisher is 90% effective

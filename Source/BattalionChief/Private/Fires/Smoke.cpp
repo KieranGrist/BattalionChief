@@ -4,24 +4,20 @@
 #include "Fires/Smoke.h"
 
 // Sets default values
-ASmoke::ASmoke()
+USmoke::USmoke() :UBaseFireComponent()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = true;
 
 }
 
 // Called when the game starts or when spawned
-void ASmoke::BeginPlay()
+void USmoke::BeginPlay()
 {
 	Super::BeginPlay();
 	
 }
 
-// Called every frame
-void ASmoke::Tick(float DeltaTime)
+void USmoke::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	Super::Tick(DeltaTime);
-
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
-

@@ -4,7 +4,7 @@
 #include "Equipment/Nozzle.h"
 
 // Sets default values
-ANozzle::ANozzle()
+ANozzle::ANozzle() : ABaseEquipmentActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;

@@ -4,7 +4,7 @@
 #include "Equipment/PikePole.h"
 
 // Sets default values
-APikePole::APikePole()
+APikePole::APikePole() : ABaseEquipmentActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;

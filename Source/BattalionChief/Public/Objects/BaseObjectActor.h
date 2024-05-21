@@ -2,6 +2,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Fires/BaseFireComponent.h"
+#include "Components/StaticMeshComponent.h" 
 #include "BaseObjectActor.generated.h"
 
 // Event dispatcher to notify when the object is destroyed
@@ -30,27 +32,37 @@ public:
 
 	// Function to ignite the object with a specific fire
 	UFUNCTION(BlueprintCallable, Category = "Object")
-	void Ignite(UBaseFireComponent* InFire);
+	void IgniteFire(UBaseFireComponent* InFire);
 
 	UFUNCTION(BlueprintCallable, Category = "Object")
 	void CalculateTemperature();
 
 	UFUNCTION(BlueprintCallable, Category = "Object")
-	void CalculateFlambility();
+	void CalculateFlammability();
 
 	UFUNCTION(BlueprintCallable, Category = "Object")
 	void CalculateSelfIgnitionChance();
 
 	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Object")
-	void SelfIgnite();
+	void SelfIgniteFire();
+
+	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Object")
+	void ExtinguishFire();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Object")
+	void OnObjectDestroyed_BP();
 
 	// Event dispatcher to notify when the object is destroyed
 	UPROPERTY(BlueprintAssignable, Category = "Object")
 	FOnObjectDestroyedSignature OnObjectDestroyed;
-protected:
+
 	// Static mesh component for equipment model
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Equipment")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Object")
 	UStaticMeshComponent* ObjectMesh;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Object")
+	UBaseFireComponent* FireComponent;
 
 	// Health of the object
 	UPROPERTY(EditAnywhere, Category = "Object")

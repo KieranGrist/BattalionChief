@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Fires/BaseFireActor.h"
+#include "Fires/BaseFireComponent.h"
 #include "ClassBFire.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class BATTALIONCHIEF_API AClassBFire : public UBaseFireComponent
+class BATTALIONCHIEF_API UClassBFire : public UBaseFireComponent
 {
 	GENERATED_BODY()
 	

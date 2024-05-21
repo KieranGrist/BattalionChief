@@ -4,7 +4,7 @@
 #include "Equipment/FirstAidKit.h"
 
 // Sets default values
-AFirstAidKit::AFirstAidKit()
+AFirstAidKit::AFirstAidKit() : ABaseEquipmentActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;

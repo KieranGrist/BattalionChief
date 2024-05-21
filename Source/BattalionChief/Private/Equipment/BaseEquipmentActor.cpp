@@ -3,18 +3,10 @@
 
 #include "Equipment/BaseEquipmentActor.h"
 // Sets default values
-ABaseEquipmentActor::ABaseEquipmentActor()
+ABaseEquipmentActor::ABaseEquipmentActor() : ABaseObjectActor()
 {
     // Set this actor to call Tick() every frame
-    PrimaryActorTick.bCanEverTick = true;
-
-    // Create a scene component and set it as the root component
-    USceneComponent* RootSceneComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootSceneComponent"));
-    SetRootComponent(RootSceneComponent);
-
-    // Create the equipment mesh component and attach it to the root component
-    EquipmentMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("EquipmentMesh"));
-    EquipmentMesh->SetupAttachment(RootComponent);
+    PrimaryActorTick.bCanEverTick = false;
 
     // Create the equipment sound component and attach it to the root component
     EquipmentSound = CreateDefaultSubobject<UAudioComponent>(TEXT("EquipmentSound"));

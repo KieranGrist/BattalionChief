@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "Objects/BaseObjectActor.h"
 #include "Components/StaticMeshComponent.h" // Include for static mesh component
 #include "Components/AudioComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "BaseEquipmentActor.generated.h"
 
 UCLASS()
-class BATTALIONCHIEF_API ABaseEquipmentActor : public AActor
+class BATTALIONCHIEF_API ABaseEquipmentActor : public ABaseObjectActor
 {
     GENERATED_BODY()
 
@@ -34,10 +34,6 @@ public:
     virtual float ScoreEquipment() const PURE_VIRTUAL(ABaseEquipmentActor::ScoreEquipment, return -1;);
 
 protected:
-    // Static mesh component for equipment model
-    UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Equipment")
-    UStaticMeshComponent* EquipmentMesh;
-
     // Sound component for sound effects
     UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Equipment")
     UAudioComponent* EquipmentSound;
