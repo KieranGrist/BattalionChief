@@ -23,6 +23,13 @@ ABaseObjectActor::ABaseObjectActor() : AActor()
 	ObjectMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
 	ObjectMesh->SetGenerateOverlapEvents(true);
 	ObjectMesh->SetNotifyRigidBodyCollision(true);
+
+	// Initialize other components
+	FireParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("FireParticles"));
+	FireParticles->SetupAttachment(ObjectMesh);
+
+	FireSound = CreateDefaultSubobject<UAudioComponent>(TEXT("FireSound"));
+	FireSound->SetupAttachment(ObjectMesh);
 }
 
 // Called when the game starts or when spawned
@@ -70,29 +77,59 @@ void ABaseObjectActor::SelfIgniteFire()
 {
 	if (FireComponent)
 		return;
-		FireComponent = NewObject<UBaseFireComponent>(this, FireType, TEXT("FireComponent"));
+	FireComponent = NewObject<UBaseFireComponent>(this, FireType, TEXT("FireComponent"));
 
-		if (FireComponent)
-		{
-			FireComponent->SetupAttachment(RootComponent);
-			FireComponent->RegisterComponent();
+	if (FireComponent)
+	{
+		FireComponent->SetupAttachment(RootComponent);
+		FireComponent->RegisterComponent();
+		FireComponent->BurningObject = this;
+		// Optionally set properties for the fire component here
+		// For example, FireComponent->SetStaticMesh(SomeMesh);
 
-			// Optionally set properties for the fire component here
-			// For example, FireComponent->SetStaticMesh(SomeMesh);
-
-			UE_LOG(LogFire, Log, TEXT("Fire ignited."));
-		}
+		UE_LOG(LogFire, Log, TEXT("Fire ignited."));
+	}
 }
 
 // Function to extinguish fire
 void ABaseObjectActor::ExtinguishFire()
 {
-	if (FireComponent)
-	{
-		FireComponent->DestroyComponent();
-		FireComponent = nullptr;
+	if (!FireComponent)
+		return;
+	FireComponent->DestroyComponent();
+	FireComponent = nullptr;
 
-		UE_LOG(LogFire, Log, TEXT("Fire extinguished."));
+	UE_LOG(LogFire, Log, TEXT("Fire extinguished."));
+}
+
+bool ABaseObjectActor::IsOnFire()
+{
+	return IsValid(FireComponent);
+}
+
+void ABaseObjectActor::StartFireEffects()
+{
+	if (FireParticles)
+	{
+		FireParticles->ActivateSystem();
+	}
+
+	if (FireSound)
+	{
+		FireSound->Play();
+	}
+}
+
+void ABaseObjectActor::StopFireEffects()
+{
+	if (FireParticles)
+	{
+		FireParticles->DeactivateSystem();
+	}
+
+	if (FireSound)
+	{
+		FireSound->Stop();
 	}
 }
 

@@ -10,12 +10,6 @@ UBaseFireComponent::UBaseFireComponent()
 {
     PrimaryComponentTick.bCanEverTick = true;
 
-    // Initialize other components
-    FireParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("FireParticles"));
-    FireParticles->SetupAttachment(this);
-
-    FireSound = CreateDefaultSubobject<UAudioComponent>(TEXT("FireSound"));
-    FireSound->SetupAttachment(this);
 }
 
 // Called when the game starts or when spawned
@@ -83,7 +77,6 @@ void UBaseFireComponent::Extinguish(UBaseExtinguisherTypeComponent* InBaseExting
 
         if (Health <= 0)
         {
-            BurningObject = Cast<ABaseObjectActor>(GetOwner());
             BurningObject->ExtinguishFire();
         }
     }

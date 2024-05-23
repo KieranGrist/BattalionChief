@@ -53,6 +53,15 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "Object")
 	void OnObjectDestroyed_BP();
 
+	UFUNCTION(BlueprintCallable, Category = "Object")
+	bool IsOnFire();
+
+	UFUNCTION(BlueprintCallable, Category = "Object")
+	virtual void StartFireEffects();
+	
+	UFUNCTION(BlueprintCallable, Category = "Object")
+	virtual void StopFireEffects();
+
 	// Event dispatcher to notify when the object is destroyed
 	UPROPERTY(BlueprintAssignable, Category = "Object")
 	FOnObjectDestroyedSignature OnObjectDestroyed;
@@ -61,29 +70,36 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Object")
 	UStaticMeshComponent* ObjectMesh;
 
+	// Particle system for visual representation of fire
+	UPROPERTY(EditAnywhere, Category = Fire)
+	UParticleSystemComponent* FireParticles;
+
+	// Audio component for fire sound effects
+	UPROPERTY(EditAnywhere, Category = Fire)
+	UAudioComponent* FireSound;
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Object")
 	UBaseFireComponent* FireComponent;
 
 	// Health of the object
 	UPROPERTY(EditAnywhere, Category = "Object")
-	float Health;
+	float Health = -1.0f;
 
 	// Weight of the object (affects fire spread and intensity)
 	UPROPERTY(EditAnywhere, Category = "Object")
-	float Weight;
+	float Weight = -1.0f;
 
 	// Objects Current Temperature
 	UPROPERTY(EditAnywhere, Category = "Object")
-	float Temperature;
+	float Temperature = -1.0f;
 	
 	// Flammability of the object (affects ignition probability and fire spread)
 	UPROPERTY(EditAnywhere, Category = "Object")
-	float Flammability;
+	float Flammability = -1.0f;
 
 	// In the right conditions some objects can catch alight ig temp 
 	UPROPERTY(EditAnywhere, Category = "Object")
-	float SelfIgnitionChance;
+	float SelfIgnitionChance = -1.0f;
 
 	// What Fire This Object Creates
 	UPROPERTY(EditAnywhere, Category = "Object")
