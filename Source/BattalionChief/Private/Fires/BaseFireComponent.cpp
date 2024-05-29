@@ -41,6 +41,20 @@ void UBaseFireComponent::CalculateIntensity()
 
 void UBaseFireComponent::CalculateSpreadRadius()
 {
+	UStaticMeshComponent* mesh = BurningObject->GetObjectMesh();
+
+	if (!mesh)
+		return;
+
+	FBoxSphereBounds bounds = mesh->GetStaticMesh()->GetBounds();
+
+	// Calculate the dimensions
+	FVector box_extent = Bounds.BoxExtent; // Half dimensions
+	FVector dimensions = box_extent * 2;   // Full dimensions
+	
+	FVector scaled_dimensions = dimensions * mesh->GetComponentScale();
+
+	SpreadRadius = float(scaled_dimensions.Max());
 }
 
 void UBaseFireComponent::CalculateSpreadChance()

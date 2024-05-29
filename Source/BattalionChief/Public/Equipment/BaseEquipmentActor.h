@@ -21,6 +21,21 @@ enum class EEquipmentSize : uint8
     ExtraLarge  // Extra-large equipment, I.E Spreaders, vehicle jack, air bags- cant really be stored on personage. Conversion = 2 Large Slots:1 Extra Large slot
 };
 
+// Slot the equipment will go in when equipped
+UENUM(BlueprintType)
+enum class ECharacterEquipmentSlot : uint8
+{
+    Error        UMETA(DisplayName = "Error"),
+    Helmet         UMETA(DisplayName = "Helmet"),
+    Face         UMETA(DisplayName = "Face"),
+    Torso        UMETA(DisplayName = "Torso"),
+    Legs         UMETA(DisplayName = "Legs"),
+    LeftHand     UMETA(DisplayName = "Left Hand"),
+    RightHand    UMETA(DisplayName = "Right Hand")
+};
+
+// Define a flag for multiple slot selection
+ENUM_CLASS_FLAGS(ECharacterEquipmentSlot)
 
 USTRUCT()
 struct FConversionMapStruct
@@ -53,22 +68,35 @@ public:
     virtual void Tick(float DeltaTime) override;
 
     // Uses the equipment
+    UFUNCTION(BlueprintCallable, Category = Equipment)
     virtual void UseEquipment() PURE_VIRTUAL(ABaseEquipmentActor::UseEquipment,);
 
     // Checks if the equipment can be used
+    UFUNCTION(BlueprintCallable, Category = Equipment)
     virtual bool CanUseEquipment() const PURE_VIRTUAL(ABaseEquipmentActor::CanUseEquipment, return false;);
  
     // Returns a score for the equipment based on situation, used by captains
+    UFUNCTION(BlueprintCallable, Category = Equipment)
     virtual float ScoreEquipment() const PURE_VIRTUAL(ABaseEquipmentActor::ScoreEquipment, return INDEX_NONE;);
-
+    
+    UFUNCTION(BlueprintCallable, Category = Equipment)
     int GetSlotConversion(EEquipmentSize InCurrentSize, EEquipmentSize InDesiredSize) const;
+
+    UFUNCTION(BlueprintCallable, Category = Equipment)
+    EEquipmentSize GetEquipmentSize() const;
+
+    UFUNCTION(BlueprintCallable, Category = Equipment)
+    ECharacterEquipmentSlot GetCharacterEquipmentSlot()const;
 
 protected:
     UPROPERTY(EditAnywhere, Category = Equipment)
     TMap<EEquipmentSize, FConversionMapStruct> ConversionMap;
 
     UPROPERTY(EditAnywhere, Category = Equipment)
-    EEquipmentSize Size;
+    EEquipmentSize EquipmentSize;
+
+    UPROPERTY(EditAnywhere, Category = Equipment)
+    ECharacterEquipmentSlot CharacterEquipmentSlot;
 
     // Only used by objects that can be held
     UPROPERTY(EditAnywhere, Category = Equipment)

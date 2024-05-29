@@ -83,3 +83,14 @@ int ABaseEquipmentActor::GetSlotConversion(EEquipmentSize InCurrentSize, EEquipm
 	const FConversionMapStruct& map = *found_map;
 	return map.GetConversion(InDesiredSize);
 }
+
+
+EEquipmentSize ABaseEquipmentActor::GetEquipmentSize() const
+{
+	return EquipmentSize;
+}
+
+ECharacterEquipmentSlot ABaseEquipmentActor::GetCharacterEquipmentSlot() const
+{
+	return CharacterEquipmentSlot;
+}

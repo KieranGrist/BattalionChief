@@ -50,6 +50,12 @@ public:
 	
 	void SecondaryAction(const FInputActionValue& Value);
 
+	void EquipEquipment(ABaseEquipmentActor* InEquipment, ECharacterEquipmentSlot InSlot);
+	
+	void AttachEquipment(ABaseEquipmentActor* InEquipment, USceneComponent* InAttachPoint);
+	
+	void DeAttachEquipment(ECharacterEquipmentSlot InSlot);
+
 	// This will handle a player possessing a character;
 	virtual void PlayerPossessCharacter();
 
@@ -62,22 +68,43 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	ABaseEquipmentActor* Head;
+	float InteractionRange = 150;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	ABaseEquipmentActor* FaceWear;
+	ABaseEquipmentActor* Helmet;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
+	USceneComponent* HelmetAttachPoint;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
+	ABaseEquipmentActor* Face;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
+	USceneComponent* FaceAttachPoint;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
 	ABaseEquipmentActor* Torso;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
+	USceneComponent* TorsoAttachPoint;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
 	ABaseEquipmentActor* Legs;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
+	USceneComponent* LegsAttachPoint;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
 	ABaseEquipmentActor* LeftHand;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
+	USceneComponent* LeftHandAttachPoint;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
 	ABaseEquipmentActor* RightHand;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
+	USceneComponent* RightHandAttachPoint;
 
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
