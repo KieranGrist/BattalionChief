@@ -70,14 +70,24 @@ void ABaseCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 
 		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+		EnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Started, this, &ACharacter::Jump);
+		EnhancedInputComponent->BindAction(JumpInputAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
+
+
+		/** Interact with world objects */
+		EnhancedInputComponent->BindAction(InteractInputAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Interact);
+
+		/** Use a tool you are holding */
+		EnhancedInputComponent->BindAction(PrimaryInputAction, ETriggerEvent::Triggered, this, &ABaseCharacter::PrimaryAction);
+
+		/** Use a tool you are holding */
+		EnhancedInputComponent->BindAction(SecondaryInputAction, ETriggerEvent::Triggered, this, &ABaseCharacter::SecondaryAction);
 
 		// Moving
-		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Move);
+		EnhancedInputComponent->BindAction(MoveInputAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Move);
 
 		// Looking
-		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Look);
+		EnhancedInputComponent->BindAction(LookInputAction, ETriggerEvent::Triggered, this, &ABaseCharacter::Look);
 	}
 	else
 	{
@@ -121,9 +131,32 @@ void ABaseCharacter::Look(const FInputActionValue& Value)
 	}
 }
 
+void ABaseCharacter::Interact(const FInputActionValue& Value)
+{
+}
+
+void ABaseCharacter::PrimaryAction(const FInputActionValue& Value)
+{
+
+}
+
+void ABaseCharacter::PlayerPossessCharacter()
+{
+
+}
+
+void ABaseCharacter::PlayerUnPossessCharacter()
+{
+
+}
+
+void ABaseCharacter::SecondaryAction(const FInputActionValue& Value)
+{
+
+}
+
 
 void ABaseCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }

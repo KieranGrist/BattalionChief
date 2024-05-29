@@ -19,6 +19,7 @@ AFireExtinguisher::AFireExtinguisher() : ABaseEquipmentActor()
 void AFireExtinguisher::BeginPlay()
 {
 	Super::BeginPlay();
+	FillTank();
 }
 
 // Called every frame

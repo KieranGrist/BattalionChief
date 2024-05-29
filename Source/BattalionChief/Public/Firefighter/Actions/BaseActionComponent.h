@@ -29,5 +29,5 @@ public:
 	virtual bool CanActionBeCompleted() const PURE_VIRTUAL(ABaseObjectActor::CanActionBeCompleted, return false;);
 
 	// Returns an evaluated score of how good this action is, to be used by captains. 
-	virtual float ScoreAction() PURE_VIRTUAL(ABaseObjectActor::ScoreAction, return -1; );
+	virtual float ScoreAction() PURE_VIRTUAL(ABaseObjectActor::ScoreAction, return INDEX_NONE; );
 };

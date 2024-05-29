@@ -33,12 +33,12 @@ public:
     // Returns a score for the equipment based on situation, used by captains
     virtual float ScoreEquipment() const override;
 
-    UFUNCTION(BlueprintCallable, CallInEditor, Category = "Spray")
+    UFUNCTION(BlueprintCallable, CallInEditor, Category = Extinguisher)
     void Spray();
 
     void SpawnProjectile();
    
-    UFUNCTION(BlueprintCallable, CallInEditor, Category = "Extinguisher")
+    UFUNCTION(BlueprintCallable, CallInEditor, Category = Extinguisher)
     void FillTank();
 
     bool IsTankEmpty() const;
@@ -46,71 +46,71 @@ public:
     void LaunchProjectile(AExtinguisherProjectile* InProjectile, const FVector& InVector);
 
 protected:
-    UPROPERTY(EditAnywhere, Category = "Extinguisher")
+    UPROPERTY(EditAnywhere, Category = Extinguisher)
     UBaseExtinguisherTypeComponent* ExtinguisherTypeComponent;
 
-    UPROPERTY(EditAnywhere, Category = "Spray")
+    UPROPERTY(EditAnywhere, Category = Extinguisher)
     TSubclassOf<AExtinguisherProjectile> ExtinguisherProjectileClass;
 
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Extinguisher)
+    UArrowComponent* ProjectileSpawn;
+
     // Capacity of the extinguisher tank (in liters)
-    UPROPERTY(EditAnywhere, Category = "Extinguisher")
+    UPROPERTY(EditAnywhere, Category = Extinguisher)
     float TankCapacity = 10.0f;
 
     // Current level of extinguishing agent in the tank (in liters)
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Extinguisher")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Extinguisher)
     float CurrentTankLevel = TankCapacity;
 
     // How many liters are consumed per use
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Extinguisher")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Extinguisher)
     float ConsumptionRate = 0.1f; 
 
     // Range of the extinguisher (in meters)
-    UPROPERTY(EditAnywhere, Category = "Spray")
+    UPROPERTY(EditAnywhere, Category = Extinguisher)
     float Range = 100; 
 
     // SprayMaxAngle creating a Spray
-    UPROPERTY(EditAnywhere, Category = "Spray")
+    UPROPERTY(EditAnywhere, Category = Extinguisher)
     float SprayMaxAngle = 45.0f; 
 
-    UPROPERTY(EditAnywhere, Category = "Spray")
+    UPROPERTY(EditAnywhere, Category = Extinguisher)
     int ProjectilesPerSpray = 30;
 
-    UPROPERTY(EditAnywhere, Category = "Spray")
+    UPROPERTY(EditAnywhere, Category = Extinguisher)
     float VelocityMultiplier = 10;
 
-    UPROPERTY(EditAnywhere, Category = "Spray|Debug")
+    UPROPERTY(EditAnywhere, Category = Extinguisher)
     FVector Origin;
 
-    UPROPERTY(EditAnywhere, Category = "Spray|Debug")
+    UPROPERTY(EditAnywhere, Category = Extinguisher)
     FVector Scale = FVector(.1f);
     
-    UPROPERTY(EditAnywhere, Category = "Spray|Debug")
+    UPROPERTY(EditAnywhere, Category = Extinguisher)
     FVector LaunchVelocity;
 
-    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spray")
-    UArrowComponent*  ProjectileSpawn;
-
-    UPROPERTY(EditAnywhere, Category = "Spray|Debug")
+    UPROPERTY(EditAnywhere, Category = Extinguisher)
     FVector Direction;
 
-    UPROPERTY(EditAnywhere, Category = "Spray|Debug")
+    UPROPERTY(EditAnywhere, Category = Extinguisher)
     float Radians = SprayMaxAngle;
 
-    UPROPERTY(EditAnywhere, Category = "Spray|Debug")
+    UPROPERTY(EditAnywhere, Category = Extinguisher)
     int32 NumSides = 12;
 
-    UPROPERTY(EditAnywhere, Category = "Spray")
+    UPROPERTY(EditAnywhere, Category = Extinguisher)
     FLinearColor Color = FLinearColor::Blue;
 
-    UPROPERTY(EditAnywhere, Category = "Spray|Debug")
+    UPROPERTY(EditAnywhere, Category = Extinguisher)
     bool bPersistentLines = false;
 
-    UPROPERTY(EditAnywhere, Category = "Spray|Debug")
+    UPROPERTY(EditAnywhere, Category = Extinguisher)
     float LifeTime = 35;
 
-    UPROPERTY(EditAnywhere, Category = "Spray|Debug")
+    UPROPERTY(EditAnywhere, Category = Extinguisher)
     uint8 DepthPriority = 0;
 
-    UPROPERTY(EditAnywhere, Category = "Spray|Debug")
+    UPROPERTY(EditAnywhere, Category = Extinguisher)
     float Thickness = 1;
 };

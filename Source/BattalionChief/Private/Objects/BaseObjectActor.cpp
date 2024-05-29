@@ -84,7 +84,7 @@ void ABaseObjectActor::SelfIgniteFire()
 	if (FireComponent)
 		return;
 
-	FireComponent = NewObject<UBaseFireComponent>(this, FireType, TEXT("FireComponent"));
+	FireComponent = NewObject<UBaseFireComponent>(this, CreatedFire, TEXT("FireComponent"));
 	SetupFireComponent();
 }
 
@@ -173,4 +173,44 @@ UFUNCTION(BlueprintCallable, Category = "Object")
 UBaseFireComponent* ABaseObjectActor::GetFireComponent() const
 {
 	return FireComponent;
+}
+
+float ABaseObjectActor::GetHealth() const
+{
+	return Health;
+}
+
+float ABaseObjectActor::GetWeight() const
+{
+	return Weight;
+}
+
+float ABaseObjectActor::GetTemperature() const
+{
+	return Temperature;
+}
+
+float ABaseObjectActor::GetThermalConductivity() const
+{
+	return ThermalConductivity;
+}
+
+float ABaseObjectActor::GetSpecificHeatCapacity() const
+{
+	return SpecificHeatCapacity;
+}
+
+float ABaseObjectActor::GetInitialTemperature() const
+{
+	return InitialTemperature;
+}
+
+float ABaseObjectActor::GetFlammability() const
+{
+	return Flammability;
+}
+
+float ABaseObjectActor::GetSelfIgnitionChance() const
+{
+	return SelfIgnitionChance;
 }

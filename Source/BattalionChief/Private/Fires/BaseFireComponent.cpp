@@ -8,26 +8,31 @@
 // Sets default values
 UBaseFireComponent::UBaseFireComponent()
 {
-    PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = true;
 
 }
 
 // Called when the game starts or when spawned
 void UBaseFireComponent::BeginPlay()
 {
-    Super::BeginPlay();
+	Super::BeginPlay();
 }
 
 void UBaseFireComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-    Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-    Burn();
-    Spread();
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	Burn();
+	Spread();
 }
 
 
 void UBaseFireComponent::CalculateHeat()
 {
+	Heat = 100.0f;
+	Intensity = 1.0f;
+	SpreadRadius = 100.0f;
+	SpreadChance = 1.0f;
+	Health = 100.0f;
 }
 
 void UBaseFireComponent::CalculateIntensity()
@@ -38,93 +43,121 @@ void UBaseFireComponent::CalculateSpreadRadius()
 {
 }
 
-void UBaseFireComponent::CalculateSpreadRate()
+void UBaseFireComponent::CalculateSpreadChance()
 {
 }
 
 void UBaseFireComponent::CalculateHealth()
 {
+
 }
 
 // Function to spread the fire
 void UBaseFireComponent::Spread()
 {
-    // Implement fire spreading logic
+	// Perform a box trace around the owner actor to find neighboring objects within the spread radius
+	TArray<FHitResult> hit_results;
+	FVector start_location = BurningObject->GetActorLocation();
+	FCollisionShape collision_shape = FCollisionShape::MakeSphere(SpreadRadius); 
+	FQuat rotation = FQuat::Identity;
+	FCollisionQueryParams collision_params;
+	collision_params.AddIgnoredActor(BurningObject); // Ignore the owner actor itself
+
+	GetWorld()->SweepMultiByChannel(hit_results, start_location, start_location, rotation, ECC_WorldDynamic, collision_shape, collision_params);
+
+	for (const FHitResult& hit_result : hit_results)
+	{
+		ABaseObjectActor* hit_actor = Cast<ABaseObjectActor>(hit_result.GetActor());
+		if (!hit_actor || hit_actor == BurningObject)
+			continue;
+
+		float random_value = FMath::FRandRange(0.0f,100.0f); // Generate a random float between 0 and 1
+		//UE_LOG(LogFire, Log,
+		//	TEXT("ABaseFireComponent::Spread    Random Value: %f <= Spread chancce: %f"),
+		//	random_value, SpreadChance);
+		if (random_value > SpreadChance)
+			continue;
+		//UE_LOG(LogFire, Log, TEXT("ABaseFireComponent::Spread    Spreading to %s"), *hit_actor->GetActorLabel());
+		hit_actor->IgniteFire(this);
+	}
+	// Debug visualization of the spread radius (optional)
+	DrawDebugSphere(GetWorld(), start_location, SpreadRadius, 12, FColor::Red, false, 1.0f);
 }
+
 
 // Function to simulate burning
 void UBaseFireComponent::Burn()
 {
-    // Implement burning logic, like reducing the health of the burning object
-    ApplyDamage();
+	// Implement burning logic, like reducing the health of the burning object
+	ApplyDamage();
 }
 
 // Function called when the fire is hit by an object containing extinguisher info
 void UBaseFireComponent::Extinguish(UBaseExtinguisherTypeComponent* InBaseExtinguisherTypeComponent)
 {
-    float* efficiency = HelpfulExtinguisherTypesMap.Find(InBaseExtinguisherTypeComponent->GetClass());
-    if (efficiency)
-    {
-        float starting_health = Health;
-        Health -= InBaseExtinguisherTypeComponent->GetExtinguishPower() * *efficiency;
-        float ending_health = Health;
-        float health_loss = starting_health - ending_health;
+	float* efficiency = HelpfulExtinguisherTypesMap.Find(InBaseExtinguisherTypeComponent->GetClass());
+	if (efficiency)
+	{
+		float starting_health = Health;
+		Health -= InBaseExtinguisherTypeComponent->GetExtinguishPower() * *efficiency;
+		float ending_health = Health;
+		float health_loss = starting_health - ending_health;
 
-        UE_LOG(LogFire, Log,
-            TEXT("ABaseFireComponent::Extinguish    InBaseExtinguisherTypeComponentClass: %s is HELPFUL, efficiency: %f, GetExtinguishPower: %f, Starting Health: %f, Ending Health: %f, Health Loss: %f"),
-            *InBaseExtinguisherTypeComponent->GetClass()->GetName(), *efficiency, InBaseExtinguisherTypeComponent->GetExtinguishPower(), starting_health, ending_health, health_loss);
+		UE_LOG(LogFire, Log,
+			TEXT("ABaseFireComponent::Extinguish    InBaseExtinguisherTypeComponentClass: %s is HELPFUL, efficiency: %f, GetExtinguishPower: %f, Starting Health: %f, Ending Health: %f, Health Loss: %f"),
+			*InBaseExtinguisherTypeComponent->GetClass()->GetName(), *efficiency, InBaseExtinguisherTypeComponent->GetExtinguishPower(), starting_health, ending_health, health_loss);
 
-        if (Health <= 0)
-        {
-            BurningObject->ExtinguishFire();
-        }
-    }
+		if (Health <= 0)
+		{
+			BurningObject->ExtinguishFire();
+		}
+	}
 
-    efficiency = HinderingExtinguisherTypesMap.Find(InBaseExtinguisherTypeComponent->GetClass());
-    if (efficiency)
-    {
-        float starting_health = Health;
-        Health += InBaseExtinguisherTypeComponent->GetExtinguishPower() * *efficiency;
-        float ending_health = Health;
-        float health_gain = ending_health - starting_health;
+	efficiency = HinderingExtinguisherTypesMap.Find(InBaseExtinguisherTypeComponent->GetClass());
+	if (efficiency)
+	{
+		float starting_health = Health;
+		Health += InBaseExtinguisherTypeComponent->GetExtinguishPower() * *efficiency;
+		float ending_health = Health;
+		float health_gain = ending_health - starting_health;
 
-        UE_LOG(LogFire, Log,
-            TEXT("ABaseFireComponent::Extinguish    InBaseExtinguisherTypeComponentClass: %s is HINDERING, efficiency: %f, GetExtinguishPower: %f, Starting Health: %f, Ending Health: %f, Health Gain: %f"),
-            *InBaseExtinguisherTypeComponent->GetClass()->GetName(), *efficiency, InBaseExtinguisherTypeComponent->GetExtinguishPower(), starting_health, ending_health, health_gain);
+		UE_LOG(LogFire, Log,
+			TEXT("ABaseFireComponent::Extinguish    InBaseExtinguisherTypeComponentClass: %s is HINDERING, efficiency: %f, GetExtinguishPower: %f, Starting Health: %f, Ending Health: %f, Health Gain: %f"),
+			*InBaseExtinguisherTypeComponent->GetClass()->GetName(), *efficiency, InBaseExtinguisherTypeComponent->GetExtinguishPower(), starting_health, ending_health, health_gain);
 
-        Spread();
-    }
+		Spread();
+	}
 }
 
 // Function to calculate damage to burning objects
 float UBaseFireComponent::CalculateDamage()
 {
-    UE_LOG(LogFire, Log, 
-        TEXT("ABaseFireComponent::CalculateDamage    Heat: %f * Intensity: %f * DeltaSeconds: %f = %f"),
-        Heat, Intensity, GetWorld()->GetDeltaSeconds(), Heat * Intensity * GetWorld()->GetDeltaSeconds());
-    return Heat * Intensity * GetWorld()->GetDeltaSeconds();
+	UE_LOG(LogFire, Log,
+		TEXT("ABaseFireComponent::CalculateDamage    Heat: %f * Intensity: %f * DeltaSeconds: %f = %f"),
+		Heat, Intensity, GetWorld()->GetDeltaSeconds(), Heat * Intensity * GetWorld()->GetDeltaSeconds());
+	return Heat * Intensity * GetWorld()->GetDeltaSeconds();
 }
 
 // Apply damage to burning objects
 void UBaseFireComponent::ApplyDamage()
 {
-    if (BurningObject)
-    {
-        BurningObject->ApplyDamage(CalculateDamage());
-    }
+	if (BurningObject)
+	{
+		BurningObject->ApplyDamage(CalculateDamage());
+	}
 }
 
 TSubclassOf<UBaseFireComponent> UBaseFireComponent::GetFireType() const
 {
-    return GetClass();
+	return GetClass();
 }
 
 ABaseObjectActor* UBaseFireComponent::GetBurningObject() const
 {
-    return BurningObject;
+	return BurningObject;
 }
 
 void UBaseFireComponent::SetBurningObject(ABaseObjectActor* InBurningObject)
 {
-    BurningObject = InBurningObject;
+	BurningObject = InBurningObject;
 }
