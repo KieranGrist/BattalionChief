@@ -7,7 +7,7 @@
 #include "ClassAFire.generated.h"
 
 /**
- * 
+ * Ordinary combustibles such as wood, paper, cloth, trash, and plastics.
  */
 UCLASS()
 class BATTALIONCHIEF_API UClassAFire : public UBaseFireComponent

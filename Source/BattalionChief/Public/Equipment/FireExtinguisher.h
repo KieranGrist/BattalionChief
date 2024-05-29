@@ -6,6 +6,7 @@
 #include "BaseEquipmentActor.h"
 #include "ExtinguisherTypes/ExtinguisherProjectile.h"
 #include "ExtinguisherTypes/BaseExtinguisherTypeComponent.h" // Assuming you have a base component for extinguisher types
+#include "Components/ArrowComponent.h"
 #include "Logging/LogMacros.h"
 #include "FireExtinguisher.generated.h"
 
@@ -87,7 +88,7 @@ protected:
     FVector LaunchVelocity;
 
     UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spray")
-    USceneComponent*  ProjectileSpawn;
+    UArrowComponent*  ProjectileSpawn;
 
     UPROPERTY(EditAnywhere, Category = "Spray|Debug")
     FVector Direction;

@@ -46,6 +46,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Object")
 	void SelfIgniteFire();
+	
+	UFUNCTION(BlueprintCallable, Category = "Object")
+	void SetupFireComponent();
 
 	UFUNCTION(BlueprintCallable, CallInEditor, Category = "Object")
 	void ExtinguishFire();
@@ -67,6 +70,22 @@ public:
 	FOnObjectDestroyedSignature OnObjectDestroyed;
 
 	// Static mesh component for equipment model
+	UFUNCTION(BlueprintCallable, Category = "Object")
+	UStaticMeshComponent* GetObjectMesh() const;
+
+	// Particle system for visual representation of fire
+	UFUNCTION(BlueprintCallable, Category = "Object")
+	UParticleSystemComponent* GetFireParticles() const;
+
+	// Audio component for fire sound effects
+	UFUNCTION(BlueprintCallable, Category = "Object")
+	UAudioComponent* GetFireSound() const;
+
+	UFUNCTION(BlueprintCallable, Category = "Object")
+	UBaseFireComponent* GetFireComponent() const;
+
+protected:
+	// Static mesh component for equipment model
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Object")
 	UStaticMeshComponent* ObjectMesh;
 
@@ -77,7 +96,7 @@ public:
 	// Audio component for fire sound effects
 	UPROPERTY(EditAnywhere, Category = Fire)
 	UAudioComponent* FireSound;
-protected:
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Object")
 	UBaseFireComponent* FireComponent;
 
@@ -85,7 +104,7 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Object")
 	float Health = -1.0f;
 
-	// Weight of the object (affects fire spread and intensity)
+	// Weight of the object in grams (affects fire spread and intensity)
 	UPROPERTY(EditAnywhere, Category = "Object")
 	float Weight = -1.0f;
 
@@ -103,5 +122,5 @@ protected:
 
 	// What Fire This Object Creates
 	UPROPERTY(EditAnywhere, Category = "Object")
-	TSubclassOf<UBaseFireComponent> FireType;
+	TSubclassOf<UBaseFireComponent> FireType = UBaseFireComponent::StaticClass();
 };

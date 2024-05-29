@@ -53,13 +53,17 @@ public:
 	// ApplyDamage to burning objects
 	virtual void ApplyDamage();
 
-	// Function to update visual and audio effects
-	void UpdateEffects();
+	TSubclassOf<UBaseFireComponent> GetFireType() const;
+	
+	ABaseObjectActor* GetBurningObject() const;
 
+	void SetBurningObject(ABaseObjectActor* InBurningObject);
+
+protected:
 	// The object that is burning
 	UPROPERTY(EditAnywhere, Category = "Fire Properties")
 	ABaseObjectActor* BurningObject;
-protected:
+
 	// Extinguishers that deal damage and stop this fire, float represents extinguishing percentage
 	UPROPERTY(EditAnywhere, Category = "Fire Properties")
 	TMap<TSubclassOf<UBaseExtinguisherTypeComponent>, float> HelpfulExtinguisherTypesMap;

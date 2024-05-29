@@ -23,7 +23,6 @@ void UBaseFireComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
     Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
     Burn();
     Spread();
-    UpdateEffects();
 }
 
 
@@ -100,6 +99,9 @@ void UBaseFireComponent::Extinguish(UBaseExtinguisherTypeComponent* InBaseExting
 // Function to calculate damage to burning objects
 float UBaseFireComponent::CalculateDamage()
 {
+    UE_LOG(LogFire, Log, 
+        TEXT("ABaseFireComponent::CalculateDamage    Heat: %f * Intensity: %f * DeltaSeconds: %f = %f"),
+        Heat, Intensity, GetWorld()->GetDeltaSeconds(), Heat * Intensity * GetWorld()->GetDeltaSeconds());
     return Heat * Intensity * GetWorld()->GetDeltaSeconds();
 }
 
@@ -112,8 +114,17 @@ void UBaseFireComponent::ApplyDamage()
     }
 }
 
-// Function to update visual and audio effects
-void UBaseFireComponent::UpdateEffects()
+TSubclassOf<UBaseFireComponent> UBaseFireComponent::GetFireType() const
 {
-    // Update particle and sound effects based on fire intensity, heat, and other properties
+    return GetClass();
+}
+
+ABaseObjectActor* UBaseFireComponent::GetBurningObject() const
+{
+    return BurningObject;
+}
+
+void UBaseFireComponent::SetBurningObject(ABaseObjectActor* InBurningObject)
+{
+    BurningObject = InBurningObject;
 }

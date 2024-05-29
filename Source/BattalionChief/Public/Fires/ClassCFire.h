@@ -7,7 +7,7 @@
 #include "ClassCFire.generated.h"
 
 /**
- * 
+ * Electrical equipment and wiring.
  */
 UCLASS()
 class BATTALIONCHIEF_API UClassCFire : public UBaseFireComponent

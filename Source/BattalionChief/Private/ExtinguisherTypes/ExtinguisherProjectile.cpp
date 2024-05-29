@@ -53,7 +53,6 @@ void AExtinguisherProjectile::NotifyHit(UPrimitiveComponent* MyComp, AActor* Oth
 		return;
 
 	ABaseObjectActor* hit_object = Cast<ABaseObjectActor>(OtherActor);
-	UBaseFireComponent* hit_fire = Cast<UBaseFireComponent>(OtherActor);
 	AExtinguisherProjectile* hit_projectile = Cast<AExtinguisherProjectile>(OtherActor);
 	if (hit_projectile)
 		return;
@@ -64,14 +63,12 @@ void AExtinguisherProjectile::NotifyHit(UPrimitiveComponent* MyComp, AActor* Oth
 	{
 		UE_LOG(LogFireExtinguisher, Log, TEXT("%s"), *debug_message);
 
-
+		if (hit_object->IsOnFire())
+		{
+			hit_object->GetFireComponent()->Extinguish(ExtinguisherType);
+		}
 	}
 
-	if (hit_fire)
-	{
-		hit_fire->Extinguish(ExtinguisherType);
-		UE_LOG(LogFireExtinguisher, Log, TEXT("%s"), *debug_message);
-	}
 	Destroy();
 }
 

@@ -36,6 +36,7 @@ ABaseObjectActor::ABaseObjectActor() : AActor()
 void ABaseObjectActor::BeginPlay()
 {
 	Super::BeginPlay();
+	StopFireEffects();
 }
 
 // Called every frame
@@ -52,12 +53,17 @@ void ABaseObjectActor::ApplyDamage(float DamageAmount)
 	{
 		OnObjectDestroyed_BP();
 		OnObjectDestroyed.Broadcast(this);
+		Destroy();
 	}
 }
 
 void ABaseObjectActor::IgniteFire(UBaseFireComponent* InFire)
 {
+	if (FireComponent)
+		return;
 
+	FireComponent = NewObject<UBaseFireComponent>(this, InFire->GetFireType(), TEXT("FireComponent"));
+	SetupFireComponent();
 }
 
 void ABaseObjectActor::CalculateTemperature()
@@ -77,29 +83,38 @@ void ABaseObjectActor::SelfIgniteFire()
 {
 	if (FireComponent)
 		return;
+
 	FireComponent = NewObject<UBaseFireComponent>(this, FireType, TEXT("FireComponent"));
-
-	if (FireComponent)
-	{
-		FireComponent->SetupAttachment(RootComponent);
-		FireComponent->RegisterComponent();
-		FireComponent->BurningObject = this;
-		// Optionally set properties for the fire component here
-		// For example, FireComponent->SetStaticMesh(SomeMesh);
-
-		UE_LOG(LogFire, Log, TEXT("Fire ignited."));
-	}
+	SetupFireComponent();
 }
+
+void ABaseObjectActor::SetupFireComponent()
+{
+		if (!FireComponent)
+		return;
+
+	FireComponent->SetupAttachment(RootComponent);
+	FireComponent->RegisterComponent();
+	FireComponent->SetBurningObject(this);
+	// Optionally set properties for the fire component here
+	// For example, FireComponent->SetStaticMesh(SomeMesh);
+	StartFireEffects();
+	UE_LOG(LogFire, Log, TEXT("Fire ignited. Type of %s"), *FireComponent->GetFireType()->GetName());
+}
+
+
 
 // Function to extinguish fire
 void ABaseObjectActor::ExtinguishFire()
 {
 	if (!FireComponent)
 		return;
+
 	FireComponent->DestroyComponent();
 	FireComponent = nullptr;
 
 	UE_LOG(LogFire, Log, TEXT("Fire extinguished."));
+	StopFireEffects();
 }
 
 bool ABaseObjectActor::IsOnFire()
@@ -133,3 +148,29 @@ void ABaseObjectActor::StopFireEffects()
 	}
 }
 
+// Static mesh component for equipment model
+UFUNCTION(BlueprintCallable, Category = "Object")
+UStaticMeshComponent* ABaseObjectActor::GetObjectMesh() const
+{
+	return ObjectMesh;
+}
+
+// Particle system for visual representation of fire
+UFUNCTION(BlueprintCallable, Category = "Object")
+UParticleSystemComponent* ABaseObjectActor::GetFireParticles() const
+{
+	return FireParticles;
+}
+
+// Audio component for fire sound effects
+UFUNCTION(BlueprintCallable, Category = "Object")
+UAudioComponent* ABaseObjectActor::GetFireSound() const
+{
+	return FireSound;
+}
+
+UFUNCTION(BlueprintCallable, Category = "Object")
+UBaseFireComponent* ABaseObjectActor::GetFireComponent() const
+{
+	return FireComponent;
+}

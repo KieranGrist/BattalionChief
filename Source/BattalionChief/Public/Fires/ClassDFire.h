@@ -7,7 +7,7 @@
 #include "ClassDFire.generated.h"
 
 /**
- * 
+ * Combustible metals like magnesium, titanium, aluminum, and potassium.
  */
 UCLASS()
 class BATTALIONCHIEF_API UClassDFire : public UBaseFireComponent

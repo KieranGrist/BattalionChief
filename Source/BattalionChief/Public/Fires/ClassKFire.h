@@ -7,7 +7,7 @@
 #include "ClassKFire.generated.h"
 
 /**
- * 
+ * Cooking oils and fats.
  */
 UCLASS()
 class BATTALIONCHIEF_API UClassKFire : public UBaseFireComponent

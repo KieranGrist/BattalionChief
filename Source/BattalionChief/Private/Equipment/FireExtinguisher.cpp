@@ -11,7 +11,7 @@ AFireExtinguisher::AFireExtinguisher() : ABaseEquipmentActor()
 	PrimaryActorTick.bCanEverTick = true;
 	// Set up the extinguisher type component
 	ExtinguisherTypeComponent = CreateDefaultSubobject<UBaseExtinguisherTypeComponent>(TEXT("ExtinguisherTypeComponent"));
-	ProjectileSpawn = CreateDefaultSubobject<USceneComponent>(TEXT("ProjectileSpawn"));
+	ProjectileSpawn = CreateDefaultSubobject<UArrowComponent>(TEXT("ProjectileSpawn"));
 	ProjectileSpawn->SetupAttachment(RootComponent);
 }
 
@@ -49,7 +49,7 @@ void AFireExtinguisher::Spray()
 
 	CurrentTankLevel -= ConsumptionRate;
 	Origin = ProjectileSpawn->GetComponentLocation();
-	Direction = GetActorForwardVector();
+	Direction =  ProjectileSpawn->GetComponentRotation().Vector();
 	UWorld* world = GetWorld();
 	Radians = FMath::DegreesToRadians(SprayMaxAngle);
 
@@ -103,5 +103,5 @@ bool AFireExtinguisher::IsTankEmpty() const
 void AFireExtinguisher::LaunchProjectile(AExtinguisherProjectile* InProjectile, const FVector& InVector)
 {
 	FVector launch_velocity = InVector * Range * VelocityMultiplier;
-	InProjectile->ObjectMesh->AddImpulse(launch_velocity, NAME_None, true);
+	InProjectile->GetObjectMesh()->AddImpulse(launch_velocity, NAME_None, true);
 }

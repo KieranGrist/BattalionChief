@@ -7,7 +7,7 @@
 #include "ClassBFire.generated.h"
 
 /**
- * 
+ * Flammable liquids like gasoline, oil, paint, and grease (but not cooking oils and fats).
  */
 UCLASS()
 class BATTALIONCHIEF_API UClassBFire : public UBaseFireComponent
