@@ -41,6 +41,8 @@ void UBaseFireComponent::CalculateIntensity()
 
 void UBaseFireComponent::CalculateSpreadRadius()
 {
+	if (!BurningObject)
+		return;
 	UStaticMeshComponent* mesh = BurningObject->GetObjectMesh();
 
 	if (!mesh)
@@ -54,7 +56,7 @@ void UBaseFireComponent::CalculateSpreadRadius()
 	
 	FVector scaled_dimensions = dimensions * mesh->GetComponentScale();
 
-	SpreadRadius = float(scaled_dimensions.Max());
+	SpreadRadius = scaled_dimensions.GetMax() + FireSpreadRadius;
 }
 
 void UBaseFireComponent::CalculateSpreadChance()
@@ -69,6 +71,9 @@ void UBaseFireComponent::CalculateHealth()
 // Function to spread the fire
 void UBaseFireComponent::Spread()
 {
+	if (!BurningObject)
+		return;
+	CalculateSpreadRadius(); 
 	// Perform a box trace around the owner actor to find neighboring objects within the spread radius
 	TArray<FHitResult> hit_results;
 	FVector start_location = BurningObject->GetActorLocation();
@@ -174,4 +179,5 @@ ABaseObjectActor* UBaseFireComponent::GetBurningObject() const
 void UBaseFireComponent::SetBurningObject(ABaseObjectActor* InBurningObject)
 {
 	BurningObject = InBurningObject;
+	CalculateSpreadRadius();
 }

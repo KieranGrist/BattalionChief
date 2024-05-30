@@ -18,6 +18,7 @@ ABaseObjectActor::ABaseObjectActor() : AActor()
 	ObjectMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("EquipmentMesh"));
 	SetRootComponent(ObjectMesh);
 
+	ObjectMesh->SetSimulatePhysics(true);
 	ObjectMesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	ObjectMesh->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
 	ObjectMesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);

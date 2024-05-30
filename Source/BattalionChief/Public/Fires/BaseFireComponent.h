@@ -95,8 +95,8 @@ protected:
 
 	// The radius within which the fire can spread
 	UPROPERTY(EditAnywhere, Category = Fire)
-	float SpreadRadius = 100.0f; 
-
+	float FireSpreadRadius = 50; 
+	
 	// The rate at which the fire spreads 
 	UPROPERTY(EditAnywhere, Category = Fire)
 	float SpreadChance = 100.0f; 
@@ -104,4 +104,8 @@ protected:
 	// The current health of the fire (used to determine if it should be extinguished)
 	UPROPERTY(EditAnywhere, Category = Fire)
 	float Health = 100.0f; 
+
+	// Current radius the fire can spread
+	UPROPERTY(VisibleAnywhere, Category = Fire)
+	float SpreadRadius = 100.0f;
 };
