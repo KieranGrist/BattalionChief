@@ -3,3 +3,7 @@
 
 #include "Room/Floor.h"
 
+AFloor::AFloor() : ABaseObjectActor()
+{
+	ObjectMesh->SetSimulatePhysics(false);
+}

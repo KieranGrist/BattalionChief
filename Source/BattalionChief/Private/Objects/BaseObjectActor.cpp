@@ -15,7 +15,7 @@ ABaseObjectActor::ABaseObjectActor() : AActor()
 	Health = 100.0f;
 
 	// Create the equipment mesh component and attach it to the root component
-	ObjectMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("EquipmentMesh"));
+	ObjectMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("ObjectMesh"));
 	SetRootComponent(ObjectMesh);
 
 	ObjectMesh->SetSimulatePhysics(true);
@@ -60,6 +60,8 @@ void ABaseObjectActor::ApplyDamage(float DamageAmount)
 
 void ABaseObjectActor::IgniteFire(UBaseFireComponent* InFire)
 {
+	if (Flammability == INDEX_NONE)
+		return;
 	if (FireComponent)
 		return;
 

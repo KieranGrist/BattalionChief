@@ -3,6 +3,8 @@
 #include "Kismet/KismetMathLibrary.h"
 #include "Objects/BaseObjectActor.h"
 #include "Engine/World.h"
+#include "Engine/StaticMesh.h"
+#include "PhysicsEngine/BodySetup.h"
 #include "DrawDebugHelpers.h"
 
 // Sets default values
@@ -48,15 +50,42 @@ void UBaseFireComponent::CalculateSpreadRadius()
 	if (!mesh)
 		return;
 
-	FBoxSphereBounds bounds = mesh->GetStaticMesh()->GetBounds();
+	ScaledBoxExtent = FVector::ZeroVector;
 
-	// Calculate the dimensions
-	FVector box_extent = Bounds.BoxExtent; // Half dimensions
-	FVector dimensions = box_extent * 2;   // Full dimensions
-	
-	FVector scaled_dimensions = dimensions * mesh->GetComponentScale();
+	CollisionBoxFullExtent = FVector::ZeroVector;
 
-	SpreadRadius = scaled_dimensions.GetMax() + FireSpreadRadius;
+	CollisionBoxHalfExtent = FVector::ZeroVector;
+
+	SpreadRadius = 100.0f;
+
+
+	UBodySetup* body_setup = mesh->GetBodySetup();
+	// Check if the mesh has convex collision elements
+	if (body_setup && body_setup->AggGeom.ConvexElems.Num() > 0)
+	{
+		// Calculate the bounding box of all convex elements
+		CollisionBox = FBox(ForceInit);
+		for (const FKConvexElem& convex_elem : body_setup->AggGeom.ConvexElems)
+		{
+			CollisionBox += convex_elem.ElemBox.GetExtent();
+		}
+
+		CollisionBoxHalfExtent = CollisionBox.GetExtent();
+		CollisionBoxFullExtent = CollisionBoxHalfExtent * 2.0f;
+		ScaledBoxExtent = CollisionBoxFullExtent * mesh->GetComponentScale();
+	}
+	else
+	{
+		// Use the bounding box of the static mesh
+		CollisionBox = mesh->GetStaticMesh()->GetBoundingBox();
+
+		// Calculate the CollisionBoxFullExtent
+		CollisionBoxHalfExtent = Bounds.BoxExtent;
+		CollisionBoxFullExtent = CollisionBoxHalfExtent * 2;
+		ScaledBoxExtent = CollisionBoxFullExtent * mesh->GetComponentScale();
+	}
+
+	SpreadRadius = ScaledBoxExtent.GetMax() + FireSpreadRadius;
 }
 
 void UBaseFireComponent::CalculateSpreadChance()
@@ -73,11 +102,11 @@ void UBaseFireComponent::Spread()
 {
 	if (!BurningObject)
 		return;
-	CalculateSpreadRadius(); 
+	CalculateSpreadRadius();
 	// Perform a box trace around the owner actor to find neighboring objects within the spread radius
 	TArray<FHitResult> hit_results;
 	FVector start_location = BurningObject->GetActorLocation();
-	FCollisionShape collision_shape = FCollisionShape::MakeSphere(SpreadRadius); 
+	FCollisionShape collision_shape = FCollisionShape::MakeSphere(SpreadRadius);
 	FQuat rotation = FQuat::Identity;
 	FCollisionQueryParams collision_params;
 	collision_params.AddIgnoredActor(BurningObject); // Ignore the owner actor itself
@@ -90,7 +119,7 @@ void UBaseFireComponent::Spread()
 		if (!hit_actor || hit_actor == BurningObject)
 			continue;
 
-		float random_value = FMath::FRandRange(0.0f,100.0f); // Generate a random float between 0 and 1
+		float random_value = FMath::FRandRange(0.0f, 100.0f); // Generate a random float between 0 and 1
 		//UE_LOG(LogFire, Log,
 		//	TEXT("ABaseFireComponent::Spread    Random Value: %f <= Spread chancce: %f"),
 		//	random_value, SpreadChance);

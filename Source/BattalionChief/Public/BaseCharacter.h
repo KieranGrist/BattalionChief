@@ -52,7 +52,7 @@ public:
 
 	void EquipEquipment(ABaseEquipmentActor* InEquipment, ECharacterEquipmentSlot InSlot);
 	
-	void AttachEquipment(ABaseEquipmentActor* InEquipment, USceneComponent* InAttachPoint);
+	void AttachEquipment(ABaseEquipmentActor* InEquipment, const FName& InAttachPoint);
 	
 	void DeAttachEquipment(ECharacterEquipmentSlot InSlot);
 
@@ -74,37 +74,37 @@ protected:
 	ABaseEquipmentActor* Helmet;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	USceneComponent* HelmetAttachPoint;
+	FName HelmetAttachPoint = FName("HelmetSocket");
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
 	ABaseEquipmentActor* Face;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	USceneComponent* FaceAttachPoint;
+	FName FaceAttachPoint = FName("FaceSocket");
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
 	ABaseEquipmentActor* Torso;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	USceneComponent* TorsoAttachPoint;
+	FName TorsoAttachPoint = FName("TorsoSocket");
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
 	ABaseEquipmentActor* Legs;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	USceneComponent* LegsAttachPoint;
+	FName LegsAttachPoint = FName("LegsSocket");
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
 	ABaseEquipmentActor* LeftHand;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	USceneComponent* LeftHandAttachPoint;
+	FName LeftHandAttachPoint = FName("LeftHandSocket");
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
 	ABaseEquipmentActor* RightHand;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	USceneComponent* RightHandAttachPoint;
+	FName RightHandAttachPoint = FName("RightHandSocket");
 
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)

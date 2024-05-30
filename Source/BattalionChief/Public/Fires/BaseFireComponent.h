@@ -105,6 +105,18 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Fire)
 	float Health = 100.0f; 
 
+	UPROPERTY(VisibleAnywhere, Category = Fire)
+	FBox CollisionBox;
+
+	UPROPERTY(VisibleAnywhere, Category = Fire)
+	FVector ScaledBoxExtent = FVector::ZeroVector;
+
+	UPROPERTY(VisibleAnywhere, Category = Fire)
+	FVector	CollisionBoxFullExtent = FVector::ZeroVector;
+
+	UPROPERTY(VisibleAnywhere, Category = Fire)
+	FVector CollisionBoxHalfExtent = FVector::ZeroVector;
+
 	// Current radius the fire can spread
 	UPROPERTY(VisibleAnywhere, Category = Fire)
 	float SpreadRadius = 100.0f;

@@ -44,24 +44,6 @@ ABaseCharacter::ABaseCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-
-	HelmetAttachPoint = CreateDefaultSubobject<USceneComponent>(TEXT("HelmetAttachPoint"));
-	HelmetAttachPoint->SetupAttachment(RootComponent);
-
-	FaceAttachPoint = CreateDefaultSubobject<USceneComponent>(TEXT("FaceAttachPoint"));
-	FaceAttachPoint->SetupAttachment(RootComponent);
-
-	TorsoAttachPoint = CreateDefaultSubobject<USceneComponent>(TEXT("TorsoAttachPoint"));
-	TorsoAttachPoint->SetupAttachment(RootComponent);
-
-	LegsAttachPoint = CreateDefaultSubobject<USceneComponent>(TEXT("LegsAttachPoint"));
-	LegsAttachPoint->SetupAttachment(RootComponent);
-
-	LeftHandAttachPoint = CreateDefaultSubobject<USceneComponent>(TEXT("LeftHandAttachPoint"));
-	LeftHandAttachPoint->SetupAttachment(RootComponent);
-
-	RightHandAttachPoint = CreateDefaultSubobject<USceneComponent>(TEXT("RightHandAttachPoint"));
-	RightHandAttachPoint->SetupAttachment(RootComponent);
 }
 
 void ABaseCharacter::BeginPlay()
@@ -235,13 +217,13 @@ void ABaseCharacter::EquipEquipment(ABaseEquipmentActor* InEquipment, ECharacter
 	}
 }
 
-void ABaseCharacter::AttachEquipment(ABaseEquipmentActor* Equipment, USceneComponent* AttachPoint)
+void ABaseCharacter::AttachEquipment(ABaseEquipmentActor* InEquipment, const FName& InSocketName)
 {
-	if (Equipment && AttachPoint)
-	{
-		// Attach the equipment actor to the specified attach point
-		Equipment->AttachToComponent(AttachPoint, FAttachmentTransformRules::SnapToTargetIncludingScale);
-	}
+	if (!InEquipment || !GetMesh())
+		return;
+
+	// Attach the equipment actor to the specified socket on the skeletal mesh
+	InEquipment->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, InSocketName);
 }
 
 void ABaseCharacter::DeAttachEquipment(ECharacterEquipmentSlot InSlot)
