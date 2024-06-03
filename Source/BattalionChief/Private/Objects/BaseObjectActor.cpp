@@ -31,6 +31,22 @@ ABaseObjectActor::ABaseObjectActor() : AActor()
 
 	FireSound = CreateDefaultSubobject<UAudioComponent>(TEXT("FireSound"));
 	FireSound->SetupAttachment(ObjectMesh);
+
+	SetupObjectMeshMaterial();
+}
+
+void ABaseObjectActor::SetupObjectMeshMaterial()
+{
+	if (!DynamicMaterial)
+	{
+		DynamicMaterial = ObjectMesh->CreateDynamicMaterialInstance(0, Material);
+		ObjectMesh->SetMaterial(0, DynamicMaterial);
+	}
+
+	for (auto vector_parameter_value_pair : VectorParameterValueMap)
+	{
+		DynamicMaterial->SetVectorParameterValue(vector_parameter_value_pair.Key, vector_parameter_value_pair.Value);
+	}
 }
 
 // Called when the game starts or when spawned
@@ -38,6 +54,7 @@ void ABaseObjectActor::BeginPlay()
 {
 	Super::BeginPlay();
 	StopFireEffects();
+	SetupObjectMeshMaterial();
 }
 
 // Called every frame

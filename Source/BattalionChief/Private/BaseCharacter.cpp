@@ -2,6 +2,7 @@
 
 #include "BaseCharacter.h"
 #include "Engine/LocalPlayer.h"
+#include "Kismet/KismetSystemLibrary.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
@@ -124,58 +125,67 @@ void ABaseCharacter::Move(const FInputActionValue& Value)
 void ABaseCharacter::Look(const FInputActionValue& Value)
 {
 	// input is a Vector2D
-	FVector2D LookAxisVector = Value.Get<FVector2D>();
+	FVector2D look_axis_vector = Value.Get<FVector2D>();
 
 	if (Controller != nullptr)
 	{
 		// add yaw and pitch input to controller
-		AddControllerYawInput(LookAxisVector.X);
-		AddControllerPitchInput(LookAxisVector.Y);
+		AddControllerYawInput(look_axis_vector.X);
+		AddControllerPitchInput(look_axis_vector.Y);
 	}
 }
 
 void ABaseCharacter::Interact(const FInputActionValue& Value)
 {
-	FVector start_location = GetActorLocation(); // Get the character's current location
-	FVector end_location = start_location + (GetActorForwardVector() * InteractionRange); // Calculate the end location based on the character's forward vector and max trace distance
+	StartLocation = GetActorLocation(); // Get the character's current location
+	Orientation = GetActorRotation();
 
-	FHitResult hit_result;
-	FCollisionQueryParams collision_params;
-	collision_params.AddIgnoredActor(this); // Ignore the character itself during the line trace
-	collision_params.AddIgnoredActor(Helmet); // Ignore held equipment
-	collision_params.AddIgnoredActor(Face); // Ignore held equipment
-	collision_params.AddIgnoredActor(Torso);  // Ignore held equipment
-	collision_params.AddIgnoredActor(Legs);  // Ignore held equipment
-	collision_params.AddIgnoredActor(LeftHand);  // Ignore held equipment
-	collision_params.AddIgnoredActor(RightHand);  // Ignore held equipment
+	// Calculate the end location based on the forward vector and interaction range
+	EndLocation = StartLocation + (Orientation.Vector() * InteractionRange);
+
+	ActorsToIgnore = 
+	{
+		this,
+		Helmet,
+		Face,
+		Torso,
+		Legs,
+		LeftHand,
+		RightHand
+	};
+	UKismetSystemLibrary::BoxTraceSingle(this, StartLocation, EndLocation, HalfSize, Orientation, TraceChannel, TraceComplex, ActorsToIgnore, EDrawDebugTrace::ForDuration, HitResult, IgnoreSelf, TraceColor, TraceHitColor, DrawTime);
 
 	// Perform the line trace
-	if (GetWorld()->LineTraceSingleByChannel(hit_result, start_location, end_location, ECC_Visibility, collision_params))
-	{
-		// Check if the hit actor is valid
-		ABaseObjectActor* hit_actor = Cast<ABaseObjectActor>(hit_result.GetActor());
-		if (!hit_actor)
-			return;
-		// Handle the hit actor, such as storing its reference or performing some action
-		// For example:
-		float DistanceToHitActor = FVector::Distance(start_location, hit_result.ImpactPoint);
-		UE_LOG(LogTemp, Warning, TEXT("Nearest object hit: %s, Distance: %f"), *hit_actor->GetName(), DistanceToHitActor);
+	if (!HitResult.GetActor())
+		return;
+	// Check if the hit actor is valid
+	ABaseObjectActor* hit_actor = Cast<ABaseObjectActor>(HitResult.GetActor());
+	if (!hit_actor)
+		return;
 
-		// Draw a debug line to visualize the line trace
-		DrawDebugLine(GetWorld(), start_location, hit_result.ImpactPoint, FColor::Green, false, 1.0f);
+	float distance_to_hit_actor = FVector::Distance(StartLocation, HitResult.ImpactPoint);
+	UE_LOG(LogBaseCharacter, Log, TEXT("Nearest object hit: %s, Distance: %f"), *hit_actor->GetName(), distance_to_hit_actor);
 
+	ABaseEquipmentActor* hit_equipment = Cast<ABaseEquipmentActor>(hit_actor);
+	if (!hit_equipment)
+		return;
 
-		ABaseEquipmentActor* hit_equipment = Cast<ABaseEquipmentActor>(hit_actor);
-		if (hit_equipment)
-		{
-			EquipEquipment(hit_equipment, hit_equipment->GetCharacterEquipmentSlot());
-		}
-	}
+	EquipEquipment(hit_equipment, hit_equipment->GetCharacterEquipmentSlot());
 }
 
 void ABaseCharacter::PrimaryAction(const FInputActionValue& Value)
 {
+	if (RightHand)
+	{
+		RightHand->UseEquipment();
+		return;
+	}
 
+	if (LeftHand)
+	{
+		LeftHand->UseEquipment();
+		return;
+	}
 }
 
 void ABaseCharacter::SecondaryAction(const FInputActionValue& Value)
@@ -203,6 +213,11 @@ void ABaseCharacter::EquipEquipment(ABaseEquipmentActor* InEquipment, ECharacter
 		Legs = InEquipment;
 		AttachEquipment(Legs, LegsAttachPoint);
 		break;
+	case ECharacterEquipmentSlot::BothHands:
+		RightHand = InEquipment;
+		LeftHand = InEquipment;
+		AttachEquipment(RightHand, RightHandAttachPoint);
+		break;
 	case ECharacterEquipmentSlot::LeftHand:
 		LeftHand = InEquipment;
 		AttachEquipment(LeftHand, LeftHandAttachPoint);
@@ -219,11 +234,15 @@ void ABaseCharacter::EquipEquipment(ABaseEquipmentActor* InEquipment, ECharacter
 
 void ABaseCharacter::AttachEquipment(ABaseEquipmentActor* InEquipment, const FName& InSocketName)
 {
-	if (!InEquipment || !GetMesh())
+	USkeletalMeshComponent* character_mesh = GetMesh();
+	if (!InEquipment || !character_mesh)
 		return;
-
-	// Attach the equipment actor to the specified socket on the skeletal mesh
-	InEquipment->AttachToComponent(GetMesh(), FAttachmentTransformRules::SnapToTargetIncludingScale, InSocketName);
+	
+	const USkeletalMeshSocket* socket = character_mesh->GetSocketByName(InSocketName);
+	InEquipment->GetObjectMesh()->SetSimulatePhysics(false);
+	InEquipment->AttachToActor(this, FAttachmentTransformRules::SnapToTargetNotIncludingScale, InSocketName);
+	InEquipment->SetActorRelativeLocation(InEquipment->GetSlotRelativeGap());
+	InEquipment->SetActorRelativeRotation(InEquipment->GetSlotRelativeRotation());
 }
 
 void ABaseCharacter::DeAttachEquipment(ECharacterEquipmentSlot InSlot)
@@ -254,6 +273,13 @@ void ABaseCharacter::DeAttachEquipment(ECharacterEquipmentSlot InSlot)
 		Legs->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 		Legs = nullptr;
 		break;
+	case ECharacterEquipmentSlot::BothHands:
+		if (!RightHand)
+			return;
+		RightHand->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		RightHand = nullptr;
+		LeftHand = nullptr;
+		break;
 	case ECharacterEquipmentSlot::LeftHand:
 		if (!LeftHand)
 			return;
@@ -265,7 +291,6 @@ void ABaseCharacter::DeAttachEquipment(ECharacterEquipmentSlot InSlot)
 			return;
 		RightHand->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 		RightHand = nullptr;
-
 		break;
 	default:
 		UE_LOG(LogTemp, Warning, TEXT("Invalid slot selected for equipment"));

@@ -26,10 +26,11 @@ UENUM(BlueprintType)
 enum class ECharacterEquipmentSlot : uint8
 {
     Error        UMETA(DisplayName = "Error"),
-    Helmet         UMETA(DisplayName = "Helmet"),
+    Helmet       UMETA(DisplayName = "Helmet"),
     Face         UMETA(DisplayName = "Face"),
     Torso        UMETA(DisplayName = "Torso"),
     Legs         UMETA(DisplayName = "Legs"),
+    BothHands     UMETA(DisplayName = "Both Hands"),
     LeftHand     UMETA(DisplayName = "Left Hand"),
     RightHand    UMETA(DisplayName = "Right Hand")
 };
@@ -86,7 +87,16 @@ public:
     EEquipmentSize GetEquipmentSize() const;
 
     UFUNCTION(BlueprintCallable, Category = Equipment)
-    ECharacterEquipmentSlot GetCharacterEquipmentSlot()const;
+    ECharacterEquipmentSlot GetCharacterEquipmentSlot() const;
+
+    UFUNCTION(BlueprintCallable, Category = Equipment)
+    const FVector& GetSlotRelativeGap() const;
+
+    UFUNCTION(BlueprintCallable, Category = Equipment)
+    const FRotator& GetSlotRelativeRotation() const;
+
+    UFUNCTION(BlueprintCallable, Category = Equipment)
+    int GetHands() const;
 
 protected:
     UPROPERTY(EditAnywhere, Category = Equipment)
@@ -97,6 +107,12 @@ protected:
 
     UPROPERTY(EditAnywhere, Category = Equipment)
     ECharacterEquipmentSlot CharacterEquipmentSlot;
+
+    UPROPERTY(EditAnywhere, Category = Equipment)
+    FVector SlotRelativeGap;
+    
+    UPROPERTY(EditAnywhere, Category = Equipment)
+    FRotator SlotRelativeRotation;
 
     // Only used by objects that can be held
     UPROPERTY(EditAnywhere, Category = Equipment)
@@ -109,5 +125,4 @@ protected:
     // Particle system component for particle effects
     UPROPERTY(EditAnywhere, Category = Equipment)
     UParticleSystemComponent* EquipmentParticles;
-
 };

@@ -94,3 +94,18 @@ ECharacterEquipmentSlot ABaseEquipmentActor::GetCharacterEquipmentSlot() const
 {
 	return CharacterEquipmentSlot;
 }
+
+const FVector& ABaseEquipmentActor::GetSlotRelativeGap() const
+{
+	return SlotRelativeGap;
+}
+
+const FRotator& ABaseEquipmentActor::GetSlotRelativeRotation() const
+{
+	return SlotRelativeRotation;
+}
+
+int ABaseEquipmentActor::GetHands() const
+{
+	return Hands;
+}

@@ -23,6 +23,8 @@ public:
 	// Sets default values for this actor's properties
 	ABaseObjectActor();
 
+	void SetupObjectMeshMaterial();
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -119,6 +121,15 @@ public:
 	float GetSelfIgnitionChance() const;
 
 protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Material)
+	UMaterialInterface* Material;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Material)
+	UMaterialInstanceDynamic* DynamicMaterial;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Material)
+	TMap<FName, FLinearColor>  VectorParameterValueMap = { {FName("Color"), FLinearColor(0, 0, 0, 1)} };
+
 	// Static mesh component for equipment model
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Object)
 	UStaticMeshComponent* ObjectMesh;

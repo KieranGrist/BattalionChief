@@ -9,6 +9,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Engine/LocalPlayer.h"
+#include "Engine/EngineTypes.h"
 #include "Equipment/BaseEquipmentActor.h"
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -67,9 +68,6 @@ public:
 	void CreateUI();
 
 protected:
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	float InteractionRange = 150;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
 	ABaseEquipmentActor* Helmet;
 
@@ -147,6 +145,44 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BaseCharacter)
 	TSubclassOf<AAIController> CreatedAIControllerClass;
+
+	UPROPERTY(EditAnywhere,  Category = Interaction)
+	float InteractionRange = 150;
+
+	UPROPERTY(EditAnywhere, Category = Interaction)
+	FVector StartLocation;
+
+	UPROPERTY(EditAnywhere, Category = Interaction)
+	FVector EndLocation;
+
+	UPROPERTY(EditAnywhere, Category = Interaction)
+	FVector HalfSize;
+
+	UPROPERTY(EditAnywhere, Category = Interaction)
+	FRotator Orientation;
+
+	UPROPERTY(EditAnywhere, Category = Interaction)
+	TEnumAsByte<ETraceTypeQuery> TraceChannel;
+
+	bool TraceComplex;
+
+	UPROPERTY(EditAnywhere, Category = Interaction)
+	TArray<AActor*> ActorsToIgnore;
+
+	UPROPERTY(EditAnywhere, Category = Interaction)
+	FHitResult HitResult;
+
+	UPROPERTY(EditAnywhere, Category = Interaction)
+	bool IgnoreSelf;
+
+	UPROPERTY(EditAnywhere, Category = Interaction)
+	FLinearColor TraceColor;
+
+	UPROPERTY(EditAnywhere, Category = Interaction)
+	FLinearColor TraceHitColor;
+
+	UPROPERTY(EditAnywhere, Category = Interaction)
+	float DrawTime = 10;
 };
 
 
