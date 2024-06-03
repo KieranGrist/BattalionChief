@@ -37,15 +37,23 @@ ABaseObjectActor::ABaseObjectActor() : AActor()
 
 void ABaseObjectActor::SetupObjectMeshMaterial()
 {
-	if (!DynamicMaterial)
+	if (!ObjectMesh)
+		return;
+
+	if (!ObjectsMaterialInterface)
 	{
-		DynamicMaterial = ObjectMesh->CreateDynamicMaterialInstance(0, Material);
-		ObjectMesh->SetMaterial(0, DynamicMaterial);
+		ObjectsMaterialInterface = ObjectMesh->GetMaterial(0);
 	}
 
-	for (auto vector_parameter_value_pair : VectorParameterValueMap)
+	if (!ObjectsMaterialInstanceDynamic)
 	{
-		DynamicMaterial->SetVectorParameterValue(vector_parameter_value_pair.Key, vector_parameter_value_pair.Value);
+		ObjectsMaterialInstanceDynamic = ObjectMesh->CreateDynamicMaterialInstance(0, ObjectsMaterialInterface); 
+		ObjectMesh->SetMaterial(0, ObjectsMaterialInstanceDynamic);
+	}
+
+	for (const TPair<FName, FLinearColor>& vector_parameter_value_pair : VectorParameterValueMap)
+	{
+		ObjectsMaterialInstanceDynamic->SetVectorParameterValue(vector_parameter_value_pair.Key, vector_parameter_value_pair.Value);
 	}
 }
 
@@ -110,7 +118,7 @@ void ABaseObjectActor::SelfIgniteFire()
 
 void ABaseObjectActor::SetupFireComponent()
 {
-		if (!FireComponent)
+	if (!FireComponent)
 		return;
 
 	FireComponent->SetupAttachment(RootComponent);

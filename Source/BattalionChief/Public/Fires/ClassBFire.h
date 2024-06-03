@@ -13,5 +13,7 @@ UCLASS()
 class BATTALIONCHIEF_API UClassBFire : public UBaseFireComponent
 {
 	GENERATED_BODY()
-	
+
+public:
+	UClassBFire();
 };

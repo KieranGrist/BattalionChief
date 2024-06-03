@@ -3,3 +3,6 @@
 
 #include "Captain/CaptainAIController.h"
 
+ACaptainAIController::ACaptainAIController()
+{
+}

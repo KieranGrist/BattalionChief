@@ -3,3 +3,6 @@
 
 #include "Chief/ChiefController.h"
 
+AChiefController::AChiefController()
+{
+}

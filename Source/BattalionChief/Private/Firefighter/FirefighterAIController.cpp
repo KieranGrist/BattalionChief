@@ -3,3 +3,6 @@
 
 #include "Firefighter/FirefighterAIController.h"
 
+AFirefighterAIController::AFirefighterAIController()
+{
+}

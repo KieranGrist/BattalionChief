@@ -13,5 +13,7 @@ UCLASS()
 class BATTALIONCHIEF_API ARoof : public ABaseObjectActor
 {
 	GENERATED_BODY()
-	
+
+public:
+	ARoof();
 };

@@ -13,5 +13,7 @@ UCLASS()
 class BATTALIONCHIEF_API ABaseRoomActor : public ABaseObjectActor
 {
 	GENERATED_BODY()
-	
+
+public:
+	ABaseRoomActor();
 };

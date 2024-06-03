@@ -3,3 +3,6 @@
 
 #include "Room/Roof.h"
 
+ARoof::ARoof()
+{
+}

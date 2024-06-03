@@ -13,5 +13,7 @@ UCLASS()
 class BATTALIONCHIEF_API AFirefighterAIController : public AAIController
 {
 	GENERATED_BODY()
-	
+
+public:
+	AFirefighterAIController();
 };

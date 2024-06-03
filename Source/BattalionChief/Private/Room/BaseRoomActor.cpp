@@ -3,3 +3,6 @@
 
 #include "Room/BaseRoomActor.h"
 
+ABaseRoomActor::ABaseRoomActor()
+{
+}

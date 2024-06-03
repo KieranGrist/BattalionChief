@@ -13,5 +13,8 @@ UCLASS()
 class BATTALIONCHIEF_API AChiefController : public APlayerController
 {
 	GENERATED_BODY()
-	
+
+public:
+	// Sets default values for this actor's properties
+	AChiefController();
 };

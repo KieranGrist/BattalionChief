@@ -3,3 +3,6 @@
 
 #include "Room/Wall.h"
 
+AWall::AWall()
+{
+}

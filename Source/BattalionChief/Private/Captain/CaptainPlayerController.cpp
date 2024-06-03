@@ -3,3 +3,6 @@
 
 #include "Captain/CaptainPlayerController.h"
 
+ACaptainPlayerController::ACaptainPlayerController()
+{
+}

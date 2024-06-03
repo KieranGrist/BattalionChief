@@ -3,3 +3,6 @@
 
 #include "Firefighter/FirefighterPlayerController.h"
 
+AFirefighterPlayerController::AFirefighterPlayerController()
+{
+}

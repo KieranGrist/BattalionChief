@@ -3,3 +3,6 @@
 
 #include "Fires/ClassBFire.h"
 
+UClassBFire::UClassBFire()
+{
+}

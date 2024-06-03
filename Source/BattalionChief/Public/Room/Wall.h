@@ -13,5 +13,7 @@ UCLASS()
 class BATTALIONCHIEF_API AWall : public ABaseObjectActor
 {
 	GENERATED_BODY()
-	
+
+public:
+	AWall();
 };

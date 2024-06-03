@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "Fires/BaseFireComponent.h"
+#include "Materials/MaterialInterface.h"
 #include "Components/StaticMeshComponent.h" 
 #include "BaseObjectActor.generated.h"
 
@@ -122,10 +123,10 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Material)
-	UMaterialInterface* Material;
+	UMaterialInterface* ObjectsMaterialInterface;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Material)
-	UMaterialInstanceDynamic* DynamicMaterial;
+	UMaterialInstanceDynamic* ObjectsMaterialInstanceDynamic;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Material)
 	TMap<FName, FLinearColor>  VectorParameterValueMap = { {FName("Color"), FLinearColor(0, 0, 0, 1)} };
