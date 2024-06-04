@@ -75,7 +75,7 @@ void AFireExtinguisher::SpawnProjectile()
 		return;
 	}
 
-	spawned_projectile->SetActorScale3D(Scale);
+	spawned_projectile->SetActorScale3D(ProjectileScale);
 	FVector random_cone_direction = UKismetMathLibrary::RandomUnitVectorInConeInDegrees(Direction, SprayMaxAngle);
 
 	// Spawn and attach extinguisher type component to spawned projectile

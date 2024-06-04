@@ -2,6 +2,8 @@
 
 #include "BaseCharacter.h"
 #include "Engine/LocalPlayer.h"
+#include "Engine/SkeletalMesh.h"
+#include "Engine/SkeletalMeshSocket.h"
 #include "Kismet/KismetSystemLibrary.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
@@ -45,12 +47,30 @@ ABaseCharacter::ABaseCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
+	UpdateSocketReferences();
 }
 
 void ABaseCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
+	UpdateSocketReferences();
+}
+
+void ABaseCharacter::UpdateSocketReferences()
+{
+	USkeletalMeshComponent* character_mesh = GetMesh();
+	if (!character_mesh)
+		return;
+
+	SocketNames = character_mesh->GetAllSocketNames();
+
+	HelmetSocket = character_mesh->GetSocketByName(HelmetAttachPoint);
+	FaceSocket = character_mesh->GetSocketByName(FaceAttachPoint);
+	TorsoSocket = character_mesh->GetSocketByName(TorsoAttachPoint);
+	LegsSocket = character_mesh->GetSocketByName(LegsAttachPoint);
+	RightHandSocket = character_mesh->GetSocketByName(RightHandAttachPoint);
+	LeftHandSocket = character_mesh->GetSocketByName(LeftHandAttachPoint);
 }
 
 void ABaseCharacter::Tick(float DeltaTime)
@@ -143,7 +163,7 @@ void ABaseCharacter::Interact(const FInputActionValue& Value)
 	// Calculate the end location based on the forward vector and interaction range
 	EndLocation = StartLocation + (Orientation.Vector() * InteractionRange);
 
-	ActorsToIgnore = 
+	ActorsToIgnore =
 	{
 		this,
 		Helmet,
@@ -232,70 +252,105 @@ void ABaseCharacter::EquipEquipment(ABaseEquipmentActor* InEquipment, ECharacter
 	}
 }
 
-void ABaseCharacter::AttachEquipment(ABaseEquipmentActor* InEquipment, const FName& InSocketName)
-{
-	USkeletalMeshComponent* character_mesh = GetMesh();
-	if (!InEquipment || !character_mesh)
-		return;
-	
-	const USkeletalMeshSocket* socket = character_mesh->GetSocketByName(InSocketName);
-	InEquipment->GetObjectMesh()->SetSimulatePhysics(false);
-	InEquipment->AttachToActor(this, FAttachmentTransformRules::SnapToTargetNotIncludingScale, InSocketName);
-	InEquipment->SetActorRelativeLocation(InEquipment->GetSlotRelativeGap());
-	InEquipment->SetActorRelativeRotation(InEquipment->GetSlotRelativeRotation());
-}
-
-void ABaseCharacter::DeAttachEquipment(ECharacterEquipmentSlot InSlot)
+void ABaseCharacter::UnequipEquipment(ECharacterEquipmentSlot InSlot)
 {
 	switch (InSlot)
 	{
 	case ECharacterEquipmentSlot::Helmet:
 		if (!Helmet)
 			return;
-		Helmet->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		DetachEquipment(Helmet);
 		Helmet = nullptr;
 		break;
 	case ECharacterEquipmentSlot::Face:
 		if (!Face)
 			return;
-		Face->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		DetachEquipment(Face);
 		Face = nullptr;
 		break;
 	case ECharacterEquipmentSlot::Torso:
 		if (!Torso)
 			return;
-		Torso->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		DetachEquipment(Torso);
 		Torso = nullptr;
 		break;
 	case ECharacterEquipmentSlot::Legs:
 		if (!Legs)
 			return;
-		Legs->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		DetachEquipment(Legs);
 		Legs = nullptr;
 		break;
 	case ECharacterEquipmentSlot::BothHands:
 		if (!RightHand)
 			return;
-		RightHand->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		DetachEquipment(RightHand);
 		RightHand = nullptr;
 		LeftHand = nullptr;
 		break;
 	case ECharacterEquipmentSlot::LeftHand:
 		if (!LeftHand)
 			return;
-		LeftHand->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		DetachEquipment(LeftHand);
 		LeftHand = nullptr;
 		break;
 	case ECharacterEquipmentSlot::RightHand:
 		if (!RightHand)
 			return;
-		RightHand->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		DetachEquipment(RightHand);
 		RightHand = nullptr;
 		break;
 	default:
 		UE_LOG(LogTemp, Warning, TEXT("Invalid slot selected for equipment"));
 		break;
 	}
+}
+
+void ABaseCharacter::AttachEquipment(ABaseEquipmentActor* InEquipment, const FName& InSocketName)
+{
+	USkeletalMeshComponent* character_mesh = GetMesh();
+	if (!InEquipment || !character_mesh)
+		return;
+
+	const USkeletalMeshSocket* socket = character_mesh->GetSocketByName(InSocketName);
+	if (!socket)
+		return;
+	FMatrix matrix;
+	socket->GetSocketMatrix(matrix, character_mesh);
+
+	// Perform the attachment
+	UStaticMeshComponent* object_mesh = InEquipment->GetObjectMesh();
+	object_mesh->SetSimulatePhysics(false);
+	object_mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	object_mesh->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
+	object_mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	object_mesh->SetGenerateOverlapEvents(false);
+	object_mesh->SetNotifyRigidBodyCollision(false);
+
+	//InEquipment->AttachToComponent(character_mesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, InSocketName);
+
+	socket->AttachActor(InEquipment, character_mesh);
+
+	// Calculate relative transform adjustments
+	FVector adjusted_location = matrix.GetOrigin() + InEquipment->GetSlotRelativeGap();
+	FRotator adjusted_rotation = matrix.Rotator() + InEquipment->GetSlotRelativeRotation();
+
+	InEquipment->SetActorRelativeLocation(adjusted_location);
+	InEquipment->SetActorRelativeRotation(adjusted_rotation);
+}
+
+
+void ABaseCharacter::DetachEquipment(ABaseEquipmentActor* InEquipment)
+{
+	if (!InEquipment)
+		return;
+	InEquipment->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+	UStaticMeshComponent* object_mesh = InEquipment->GetObjectMesh();
+	object_mesh->SetSimulatePhysics(true);
+	object_mesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	object_mesh->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
+	object_mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
+	object_mesh->SetGenerateOverlapEvents(true);
+	object_mesh->SetNotifyRigidBodyCollision(true);
 }
 
 void ABaseCharacter::PlayerPossessCharacter()

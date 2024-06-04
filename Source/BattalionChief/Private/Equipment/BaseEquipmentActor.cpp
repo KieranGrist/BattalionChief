@@ -109,3 +109,13 @@ int ABaseEquipmentActor::GetHands() const
 {
 	return Hands;
 }
+
+void ABaseEquipmentActor::SetSlotRelativeGap(const FVector& InSlotRelativeGap)
+{
+	SlotRelativeGap = InSlotRelativeGap;
+}
+
+void ABaseEquipmentActor::SetSlotRelativeRotation(const FRotator& InSlotRelativeRotation)
+{
+	SlotRelativeRotation = InSlotRelativeRotation;
+}

@@ -96,6 +96,12 @@ public:
     const FRotator& GetSlotRelativeRotation() const;
 
     UFUNCTION(BlueprintCallable, Category = Equipment)
+    void SetSlotRelativeGap(const FVector& InSlotRelativeGap);
+
+    UFUNCTION(BlueprintCallable, Category = Equipment)
+    void SetSlotRelativeRotation(const FRotator& InSlotRelativeRotation);
+
+    UFUNCTION(BlueprintCallable, Category = Equipment)
     int GetHands() const;
 
 protected:

@@ -41,9 +41,9 @@ void ABaseObjectActor::SetupObjectMeshMaterial()
 		return;
 
 	if (!ObjectsMaterialInterface)
-	{
 		ObjectsMaterialInterface = ObjectMesh->GetMaterial(0);
-	}
+	if (!ObjectsMaterialInterface)
+		return;
 
 	if (!ObjectsMaterialInstanceDynamic)
 	{

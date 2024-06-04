@@ -85,7 +85,7 @@ protected:
     FVector Origin;
 
     UPROPERTY(EditAnywhere, Category = Extinguisher)
-    FVector Scale = FVector(.1f);
+    FVector ProjectileScale = FVector(.1f);
     
     UPROPERTY(EditAnywhere, Category = Extinguisher)
     FVector LaunchVelocity;
