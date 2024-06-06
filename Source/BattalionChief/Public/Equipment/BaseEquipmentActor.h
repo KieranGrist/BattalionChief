@@ -37,9 +37,6 @@ public:
     // Returns a score for the equipment based on situation, used by captains
     UFUNCTION(BlueprintCallable, Category = Equipment)
     virtual float ScoreEquipment() const PURE_VIRTUAL(ABaseEquipmentActor::ScoreEquipment, return INDEX_NONE;);
-    
-    UFUNCTION(BlueprintCallable, Category = Equipment)
-    int32 GetSlotConversion(EEquipmentSize InCurrentSize, EEquipmentSize InDesiredSize) const;
 
     UFUNCTION(BlueprintCallable, Category = Equipment)
     EEquipmentSize GetEquipmentSize() const;

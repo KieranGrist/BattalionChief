@@ -1,8 +1,13 @@
 // Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
+#include "EquipmentDetails.generated.h"
+
+class USkeletalMeshComponent;
+class ABaseEquipmentActor;
+class USkeletalMeshSocket;
+
 
 // This game is based on realism and in most cases firefighters will only take one or two things in their hands but certain things can be stored and this is useful to have
 UENUM(BlueprintType)
@@ -14,9 +19,6 @@ enum class EEquipmentSize : uint8
     Large,      // Large-sized equipment, I.E Hose, Firefighter Axe, Fire extinguisher. PPE. Hard to store on a person but not impossible. Conversion = Medium Slots 2:1 large slot
     ExtraLarge  // Extra-large equipment, I.E Spreaders, vehicle jack, air bags- cant really be stored on personage. Conversion = 2 Large Slots:1 Extra Large slot
 };
-
-
-class ABaseEquipmentActor;
 
 // Slot the equipment will go in when equipped
 UENUM(BlueprintType)
@@ -32,10 +34,9 @@ enum class ECharacterEquipmentSlotType : uint8
     RightHand    UMETA(DisplayName = "Right Hand")
 };
 
-USTRUCT()
+USTRUCT(BlueprintType)
 struct FBaseCharacterEquipmentSlot
 {
-
     GENERATED_BODY()
 
 public:
@@ -91,7 +92,7 @@ protected:
     UPROPERTY(EditAnywhere, Category = Equipment)
     USkeletalMeshComponent* CharacterMesh;
     
-    UPROPERTY(EditAnywhere, Category = Equipment)
+    UPROPERTY(VisibleAnywhere, Category = Equipment)
     const USkeletalMeshSocket* Socket;
 
     UPROPERTY(EditAnywhere, Category = Equipment)
@@ -110,7 +111,6 @@ protected:
 USTRUCT()
 struct FPocketEquipment : public FBaseCharacterEquipmentSlot
 {
-
     GENERATED_BODY()
 
 public:

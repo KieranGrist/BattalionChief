@@ -1,8 +1,9 @@
-#include "EquipmentDetails.h"
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "Equipment/EquipmentDetails.h"
 #include "Equipment/BaseEquipmentActor.h"
+#include "Engine/SkeletalMesh.h"
+#include "Engine/SkeletalMeshSocket.h"
 
 FBaseCharacterEquipmentSlot::FBaseCharacterEquipmentSlot(ECharacterEquipmentSlotType InCharacterEquipmentSlotType, FName InSocketName)
 {
@@ -47,7 +48,7 @@ void FBaseCharacterEquipmentSlot::AttachEquipment(ABaseEquipmentActor* InEquipme
 
 void FBaseCharacterEquipmentSlot::DetachEquipment()
 {
-    if (!Exuipment)
+    if (!Equipment)
         return;
     Equipment->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
     UStaticMeshComponent* object_mesh = Equipment->GetObjectMesh();
@@ -62,7 +63,7 @@ void FBaseCharacterEquipmentSlot::DetachEquipment()
 }
 
 
-static float FBaseCharacterEquipmentSlot::GetSlotConversion(EEquipmentSize InCurrentSize, EEquipmentSize InDesiredSize)
+float FBaseCharacterEquipmentSlot::GetSlotConversion(EEquipmentSize InCurrentSize, EEquipmentSize InDesiredSize)
 {
     // Conversion rates based on slot size
     const float ConversionRates[][4] = {
@@ -146,6 +147,11 @@ void FBaseCharacterEquipmentSlot::SetIndex(int32 InIndex)
 }
 
 FPocketEquipment::FPocketEquipment(ECharacterEquipmentSlotType InCharacterEquipmentSlotType, FName InSocketName) : FBaseCharacterEquipmentSlot(InCharacterEquipmentSlotType, InSocketName)
+{
+
+}
+
+void FPocketEquipment::AddEquipmentToPocket()
 {
 
 }

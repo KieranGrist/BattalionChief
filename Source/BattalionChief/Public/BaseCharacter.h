@@ -77,16 +77,16 @@ protected:
 	FBaseCharacterEquipmentSlot FaceCharacterEquipmentSlot  = FBaseCharacterEquipmentSlot(ECharacterEquipmentSlotType::Face, FName("FaceSocket"));
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	FPocketEquipment TorsoCharacterEquipmentSlot  = FPocketEquipment(ECharacterEquipmentSlotType::Face, FName("TorsoSocket"));
+	FPocketEquipment TorsoCharacterEquipmentSlot  = FPocketEquipment(ECharacterEquipmentSlotType::Torso, FName("TorsoSocket"));
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	FPocketEquipment LegsCharacterEquipmentSlot  = FPocketEquipment(ECharacterEquipmentSlotType::Face, FName("LegsSocket"));
+	FPocketEquipment LegsCharacterEquipmentSlot  = FPocketEquipment(ECharacterEquipmentSlotType::Legs, FName("LegsSocket"));
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	FBaseCharacterEquipmentSlot LeftHandCharacterEquipmentSlot  = FBaseCharacterEquipmentSlot(ECharacterEquipmentSlotType::Face, FName("LeftHandSocket"));
+	FBaseCharacterEquipmentSlot LeftHandCharacterEquipmentSlot  = FBaseCharacterEquipmentSlot(ECharacterEquipmentSlotType::LeftHand, FName("LeftHandSocket"));
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	FBaseCharacterEquipmentSlot RightHandCharacterEquipmentSlot  = FBaseCharacterEquipmentSlot(ECharacterEquipmentSlotType::Face, FName("RightHandSocket"));
+	FBaseCharacterEquipmentSlot RightHandCharacterEquipmentSlot  = FBaseCharacterEquipmentSlot(ECharacterEquipmentSlotType::RightHand, FName("RightHandSocket"));
 
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
