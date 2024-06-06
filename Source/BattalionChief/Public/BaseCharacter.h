@@ -37,8 +37,6 @@ public:
 	// To add mapping context
 	virtual void BeginPlay();
 
-	void UpdateSocketReferences();
-
 	/** Called for movement input */
 	void Move(const FInputActionValue& Value);
 
@@ -73,49 +71,22 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	FBaseCharacterEquipmentSlot FaceCharacterEquipmentSlot;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Equipment)
-	const USkeletalMeshSocket* FaceSocket;
+	FBaseCharacterEquipmentSlot HelmetCharacterEquipmentSlot  = FBaseCharacterEquipmentSlot(ECharacterEquipmentSlotType::Helmet, FName("HelmetSocket"));
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
+	FBaseCharacterEquipmentSlot FaceCharacterEquipmentSlot  = FBaseCharacterEquipmentSlot(ECharacterEquipmentSlotType::Face, FName("FaceSocket"));
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	FName FaceAttachPoint = FName("FaceSocket");
-
+	FPocketEquipment TorsoCharacterEquipmentSlot  = FPocketEquipment(ECharacterEquipmentSlotType::Face, FName("TorsoSocket"));
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	ABaseEquipmentActor* Torso;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Equipment)
-	const USkeletalMeshSocket* TorsoSocket;
-
+	FPocketEquipment LegsCharacterEquipmentSlot  = FPocketEquipment(ECharacterEquipmentSlotType::Face, FName("LegsSocket"));
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	FName TorsoAttachPoint = FName("TorsoSocket");
-
+	FBaseCharacterEquipmentSlot LeftHandCharacterEquipmentSlot  = FBaseCharacterEquipmentSlot(ECharacterEquipmentSlotType::Face, FName("LeftHandSocket"));
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	ABaseEquipmentActor* Legs;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Equipment)
-	const USkeletalMeshSocket* LegsSocket;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	FName LegsAttachPoint = FName("LegsSocket");
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	ABaseEquipmentActor* LeftHand;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Equipment)
-	const USkeletalMeshSocket* LeftHandSocket;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	FName LeftHandAttachPoint = FName("LeftHandSocket");
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	ABaseEquipmentActor* RightHand;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Equipment)
-	const USkeletalMeshSocket* RightHandSocket;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	FName RightHandAttachPoint = FName("RightHandSocket");
+	FBaseCharacterEquipmentSlot RightHandCharacterEquipmentSlot  = FBaseCharacterEquipmentSlot(ECharacterEquipmentSlotType::Face, FName("RightHandSocket"));
 
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)

@@ -47,28 +47,14 @@ ABaseCharacter::ABaseCharacter()
 	FollowCamera = CreateDefaultSubobject<UCameraComponent>(TEXT("FollowCamera"));
 	FollowCamera->SetupAttachment(CameraBoom, USpringArmComponent::SocketName); // Attach the camera to the end of the boom and let the boom adjust to match the controller orientation
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
-	UpdateSocketReferences();
+	SetupEquipmentSockets();
 }
 
 void ABaseCharacter::BeginPlay()
 {
 	// Call the base class  
 	Super::BeginPlay();
-	UpdateSocketReferences();
-}
-
-void ABaseCharacter::UpdateSocketReferences()
-{
-	USkeletalMeshComponent* character_mesh = GetMesh();
-	if (!character_mesh)
-		return;
-
-	HelmetSocket = character_mesh->GetSocketByName(HelmetAttachPoint);
-	FaceSocket = character_mesh->GetSocketByName(FaceAttachPoint);
-	TorsoSocket = character_mesh->GetSocketByName(TorsoAttachPoint);
-	LegsSocket = character_mesh->GetSocketByName(LegsAttachPoint);
-	RightHandSocket = character_mesh->GetSocketByName(RightHandAttachPoint);
-	LeftHandSocket = character_mesh->GetSocketByName(LeftHandAttachPoint);
+	SetupEquipmentSockets();
 }
 
 void ABaseCharacter::Tick(float DeltaTime)
@@ -164,12 +150,12 @@ void ABaseCharacter::Interact(const FInputActionValue& Value)
 	ActorsToIgnore =
 	{
 		this,
-		Helmet,
-		Face,
-		Torso,
-		Legs,
-		LeftHand,
-		RightHand
+	HelmetCharacterEquipmentSlot.GetEquipment(),
+	FaceCharacterEquipmentSlot.GetEquipment(),
+	TorsoCharacterEquipmentSlot.GetEquipment(),
+	LegsCharacterEquipmentSlot.GetEquipment(),
+	RightHandCharacterEquipmentSlot.GetEquipment(),
+	LeftHandCharacterEquipmentSlot.GetEquipment()
 	};
 	UKismetSystemLibrary::BoxTraceSingle(this, StartLocation, EndLocation, HalfSize, Orientation, TraceChannel, TraceComplex, ActorsToIgnore, EDrawDebugTrace::ForDuration, HitResult, IgnoreSelf, TraceColor, TraceHitColor, DrawTime);
 
@@ -193,15 +179,15 @@ void ABaseCharacter::Interact(const FInputActionValue& Value)
 
 void ABaseCharacter::PrimaryAction(const FInputActionValue& Value)
 {
-	if (RightHand)
+	if (RightHandCharacterEquipmentSlot.GetEquipment())
 	{
-		RightHand->UseEquipment();
+		RightHandCharacterEquipmentSlot.GetEquipment()->UseEquipment();
 		return;
 	}
 
-	if (LeftHand)
+	if (LeftHandCharacterEquipmentSlot.GetEquipment())
 	{
-		LeftHand->UseEquipment();
+		LeftHandCharacterEquipmentSlot.GetEquipment()->UseEquipment();
 		return;
 	}
 }
@@ -216,33 +202,26 @@ void ABaseCharacter::EquipEquipment(ABaseEquipmentActor* InEquipment, ECharacter
 	switch (InSlot)
 	{
 	case ECharacterEquipmentSlotType::Helmet:
-		Helmet = InEquipment;
-		AttachEquipment(Helmet, HelmetAttachPoint);
+		HelmetCharacterEquipmentSlot.AttachEquipment(InEquipment);
 		break;
 	case ECharacterEquipmentSlotType::Face:
-		Face = InEquipment;
-		AttachEquipment(Face, FaceAttachPoint);
+		FaceCharacterEquipmentSlot.AttachEquipment(InEquipment);
 		break;
 	case ECharacterEquipmentSlotType::Torso:
-		Torso = InEquipment;
-		AttachEquipment(Torso, TorsoAttachPoint);
+		TorsoCharacterEquipmentSlot.AttachEquipment(InEquipment);
 		break;
 	case ECharacterEquipmentSlotType::Legs:
-		Legs = InEquipment;
-		AttachEquipment(Legs, LegsAttachPoint);
+		LegsCharacterEquipmentSlot.AttachEquipment(InEquipment);
 		break;
 	case ECharacterEquipmentSlotType::BothHands:
-		RightHand = InEquipment;
-		LeftHand = InEquipment;
-		AttachEquipment(RightHand, RightHandAttachPoint);
+		RightHandCharacterEquipmentSlot.AttachEquipment(InEquipment);
+		LeftHandCharacterEquipmentSlot.SetEquipment(InEquipment);
 		break;
 	case ECharacterEquipmentSlotType::LeftHand:
-		LeftHand = InEquipment;
-		AttachEquipment(LeftHand, LeftHandAttachPoint);
+		LeftHandCharacterEquipmentSlot.AttachEquipment(InEquipment);
 		break;
 	case ECharacterEquipmentSlotType::RightHand:
-		RightHand = InEquipment;
-		AttachEquipment(RightHand, RightHandAttachPoint);
+		RightHandCharacterEquipmentSlot.AttachEquipment(InEquipment);
 		break;
 	default:
 		UE_LOG(LogTemp, Warning, TEXT("Invalid slot selected for equipment"));
@@ -255,47 +234,26 @@ void ABaseCharacter::UnequipEquipment(ECharacterEquipmentSlotType InSlot)
 	switch (InSlot)
 	{
 	case ECharacterEquipmentSlotType::Helmet:
-		if (!Helmet)
-			return;
-		DetachEquipment(Helmet);
-		Helmet = nullptr;
+		HelmetCharacterEquipmentSlot.DetachEquipment();
 		break;
 	case ECharacterEquipmentSlotType::Face:
-		if (!Face)
-			return;
-		DetachEquipment(Face);
-		Face = nullptr;
+		FaceCharacterEquipmentSlot.DetachEquipment();
 		break;
 	case ECharacterEquipmentSlotType::Torso:
-		if (!Torso)
-			return;
-		DetachEquipment(Torso);
-		Torso = nullptr;
+		TorsoCharacterEquipmentSlot.DetachEquipment();
 		break;
 	case ECharacterEquipmentSlotType::Legs:
-		if (!Legs)
-			return;
-		DetachEquipment(Legs);
-		Legs = nullptr;
+		LegsCharacterEquipmentSlot.DetachEquipment();
 		break;
 	case ECharacterEquipmentSlotType::BothHands:
-		if (!RightHand)
-			return;
-		DetachEquipment(RightHand);
-		RightHand = nullptr;
-		LeftHand = nullptr;
+		RightHandCharacterEquipmentSlot.DetachEquipment();
+		LeftHandCharacterEquipmentSlot.SetEquipment(nullptr);
 		break;
 	case ECharacterEquipmentSlotType::LeftHand:
-		if (!LeftHand)
-			return;
-		DetachEquipment(LeftHand);
-		LeftHand = nullptr;
+		LeftHandCharacterEquipmentSlot.DetachEquipment();
 		break;
 	case ECharacterEquipmentSlotType::RightHand:
-		if (!RightHand)
-			return;
-		DetachEquipment(RightHand);
-		RightHand = nullptr;
+		RightHandCharacterEquipmentSlot.DetachEquipment();
 		break;
 	default:
 		UE_LOG(LogTemp, Warning, TEXT("Invalid slot selected for equipment"));
@@ -303,48 +261,17 @@ void ABaseCharacter::UnequipEquipment(ECharacterEquipmentSlotType InSlot)
 	}
 }
 
-void ABaseCharacter::AttachEquipment(ABaseEquipmentActor* InEquipment, const FName& InSocketName)
-{
-	USkeletalMeshComponent* character_mesh = GetMesh();
-	if (!InEquipment || !character_mesh)
-		return;
-
-	const USkeletalMeshSocket* socket = character_mesh->GetSocketByName(InSocketName);
-	if (!socket)
-		return;
-
-	// Perform the attachment
-	UStaticMeshComponent* object_mesh = InEquipment->GetObjectMesh();
-	object_mesh->SetSimulatePhysics(false);
-	object_mesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	object_mesh->SetCollisionObjectType(ECollisionChannel::ECC_WorldStatic);
-	object_mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
-	object_mesh->SetGenerateOverlapEvents(false);
-	object_mesh->SetNotifyRigidBodyCollision(false);
-
-	socket->AttachActor(InEquipment, character_mesh);
-
-	InEquipment->SetActorRelativeLocation(InEquipment->GetSlotRelativeGap());
-	InEquipment->SetActorRelativeRotation(InEquipment->GetSlotRelativeRotation());
-}
-
-
-void ABaseCharacter::DetachEquipment(ABaseEquipmentActor* InEquipment)
-{
-	if (!InEquipment)
-		return;
-	InEquipment->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-	UStaticMeshComponent* object_mesh = InEquipment->GetObjectMesh();
-	object_mesh->SetSimulatePhysics(true);
-	object_mesh->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	object_mesh->SetCollisionObjectType(ECollisionChannel::ECC_PhysicsBody);
-	object_mesh->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Block);
-	object_mesh->SetGenerateOverlapEvents(true);
-	object_mesh->SetNotifyRigidBodyCollision(true);
-}
-
 void ABaseCharacter::SetupEquipmentSockets()
 {
+	USkeletalMeshComponent* character_mesh = GetMesh();
+	if (!character_mesh)
+		return;
+	HelmetCharacterEquipmentSlot.SetupSocket(character_mesh);
+	FaceCharacterEquipmentSlot.SetupSocket(character_mesh);
+	TorsoCharacterEquipmentSlot.SetupSocket(character_mesh);
+	LegsCharacterEquipmentSlot.SetupSocket(character_mesh);
+	RightHandCharacterEquipmentSlot.SetupSocket(character_mesh);
+	LeftHandCharacterEquipmentSlot.SetupSocket(character_mesh);
 }
 
 void ABaseCharacter::PlayerPossessCharacter()

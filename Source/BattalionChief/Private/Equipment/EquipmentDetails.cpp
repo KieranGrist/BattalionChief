@@ -144,3 +144,8 @@ void FBaseCharacterEquipmentSlot::SetIndex(int32 InIndex)
 { 
     Index = InIndex;
 }
+
+FPocketEquipment::FPocketEquipment(ECharacterEquipmentSlotType InCharacterEquipmentSlotType, FName InSocketName) : FBaseCharacterEquipmentSlot(InCharacterEquipmentSlotType, InSocketName)
+{
+
+}

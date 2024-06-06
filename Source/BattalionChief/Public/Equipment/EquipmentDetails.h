@@ -117,6 +117,8 @@ public:
     
     FPocketEquipment() {}
 
+    FPocketEquipment(ECharacterEquipmentSlotType InCharacterEquipmentSlotType, FName InSocketName);
+
     void AddEquipmentToPocket();
 
     UPROPERTY(EditAnywhere, Category = Pocket)
