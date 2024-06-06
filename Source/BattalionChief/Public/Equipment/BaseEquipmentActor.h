@@ -64,9 +64,6 @@ public:
 
 protected:
     UPROPERTY(EditAnywhere, Category = Equipment)
-    TMap<EEquipmentSize, FConversionMapStruct> ConversionMap;
-
-    UPROPERTY(EditAnywhere, Category = Equipment)
     EEquipmentSize EquipmentSize;
 
     UPROPERTY(EditAnywhere, Category = Equipment)

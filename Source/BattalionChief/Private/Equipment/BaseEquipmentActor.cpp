@@ -15,38 +15,6 @@ ABaseEquipmentActor::ABaseEquipmentActor() : ABaseObjectActor()
 	EquipmentParticles = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("EquipmentParticles"));
 	EquipmentParticles->SetupAttachment(RootComponent);
 
-
-	ConversionMap =
-	{
-		{
-			EEquipmentSize::Small, FConversionMapStruct({
-													{ EEquipmentSize::Small, 1 },
-													{ EEquipmentSize::Medium, 2 },
-													{ EEquipmentSize::Large, 4 },
-													{ EEquipmentSize::ExtraLarge, 8 }
-													})},
-		{
-			EEquipmentSize::Medium, FConversionMapStruct({
-													{ EEquipmentSize::Small, 2 },
-													{ EEquipmentSize::Medium, 1 },
-													{ EEquipmentSize::Large, 2 },
-													{ EEquipmentSize::ExtraLarge, 4 }
-													})},
-		{
-			EEquipmentSize::Large, FConversionMapStruct({
-													{ EEquipmentSize::Small, 4 },
-													{ EEquipmentSize::Medium, 2 },
-													{ EEquipmentSize::Large, 1 },
-													{ EEquipmentSize::ExtraLarge, 2 }
-													})},
-		{
-			EEquipmentSize::ExtraLarge, FConversionMapStruct({
-													{ EEquipmentSize::Small, 8 },
-													{ EEquipmentSize::Medium, 4 },
-													{ EEquipmentSize::Large, 2 },
-													{ EEquipmentSize::ExtraLarge, 1 }
-													})},
-	};
 }
 
 // Called when the game starts or when spawned
@@ -60,16 +28,6 @@ void ABaseEquipmentActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 }
-
-int32 ABaseEquipmentActor::GetSlotConversion(EEquipmentSize InCurrentSize, EEquipmentSize InDesiredSize) const
-{
-	auto found_map = ConversionMap.Find(InCurrentSize);
-	if (!found_map)
-		return INDEX_NONE;
-	const FConversionMapStruct& map = *found_map;
-	return map.GetConversion(InDesiredSize);
-}
-
 
 EEquipmentSize ABaseEquipmentActor::GetEquipmentSize() const
 {

@@ -343,6 +343,10 @@ void ABaseCharacter::DetachEquipment(ABaseEquipmentActor* InEquipment)
 	object_mesh->SetNotifyRigidBodyCollision(true);
 }
 
+void ABaseCharacter::SetupEquipmentSockets()
+{
+}
+
 void ABaseCharacter::PlayerPossessCharacter()
 {
 

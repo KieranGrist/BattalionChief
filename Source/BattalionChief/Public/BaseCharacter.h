@@ -56,11 +56,9 @@ public:
 	void EquipEquipment(ABaseEquipmentActor* InEquipment, ECharacterEquipmentSlotType InSlot);
 	
 	void UnequipEquipment(ECharacterEquipmentSlotType InSlot);
+	
+	void SetupEquipmentSockets();
 
-	void AttachEquipment(ABaseEquipmentActor* InEquipment, const FName& InAttachPoint);
-	
-	void DetachEquipment(ABaseEquipmentActor* InEquipment);
-	
 	void SpawnAndAttach();
 
 	// This will handle a player possessing a character;
@@ -75,16 +73,7 @@ public:
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	ABaseEquipmentActor* Helmet;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Equipment)
-	const USkeletalMeshSocket* HelmetSocket;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	FName HelmetAttachPoint = FName("HelmetSocket");
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	ABaseEquipmentActor* Face;
+	FBaseCharacterEquipmentSlot FaceCharacterEquipmentSlot;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = Equipment)
 	const USkeletalMeshSocket* FaceSocket;
