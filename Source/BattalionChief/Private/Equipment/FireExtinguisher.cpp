@@ -56,7 +56,7 @@ void AFireExtinguisher::Spray()
 
 	DrawDebugCone(world, Origin, Direction, Range, Radians, Radians, NumSides, Color.ToFColor(true), bPersistentLines, LifeTime, DepthPriority, Thickness);
 
-	for (int i = 0; i < ProjectilesPerSpray; i++)
+	for (int32 i = 0; i < ProjectilesPerSpray; i++)
 	{
 		SpawnProjectile();
 	}

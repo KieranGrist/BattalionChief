@@ -61,21 +61,7 @@ void ABaseEquipmentActor::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-FConversionMapStruct::FConversionMapStruct(const TMap<EEquipmentSize, int>& InMap)
-{
-	ConversionMap = InMap;
-}
-
-int FConversionMapStruct::GetConversion(EEquipmentSize InSize) const
-{
-	const int* found_conversion = ConversionMap.Find(InSize);
-
-	if (!found_conversion)
-		return INDEX_NONE;
-	return *found_conversion;
-}
-
-int ABaseEquipmentActor::GetSlotConversion(EEquipmentSize InCurrentSize, EEquipmentSize InDesiredSize) const
+int32 ABaseEquipmentActor::GetSlotConversion(EEquipmentSize InCurrentSize, EEquipmentSize InDesiredSize) const
 {
 	auto found_map = ConversionMap.Find(InCurrentSize);
 	if (!found_map)
@@ -90,7 +76,7 @@ EEquipmentSize ABaseEquipmentActor::GetEquipmentSize() const
 	return EquipmentSize;
 }
 
-ECharacterEquipmentSlot ABaseEquipmentActor::GetCharacterEquipmentSlot() const
+ECharacterEquipmentSlotType ABaseEquipmentActor::GetCharacterEquipmentSlot() const
 {
 	return CharacterEquipmentSlot;
 }
@@ -105,7 +91,7 @@ const FRotator& ABaseEquipmentActor::GetSlotRelativeRotation() const
 	return SlotRelativeRotation;
 }
 
-int ABaseEquipmentActor::GetHands() const
+int32 ABaseEquipmentActor::GetHands() const
 {
 	return Hands;
 }

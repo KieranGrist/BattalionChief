@@ -76,7 +76,7 @@ protected:
     float SprayMaxAngle = 45.0f; 
 
     UPROPERTY(EditAnywhere, Category = Extinguisher)
-    int ProjectilesPerSpray = 30;
+    int32 ProjectilesPerSpray = 30;
 
     UPROPERTY(EditAnywhere, Category = Extinguisher)
     float VelocityMultiplier = 10;

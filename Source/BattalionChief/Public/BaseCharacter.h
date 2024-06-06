@@ -53,14 +53,16 @@ public:
 	
 	void SecondaryAction(const FInputActionValue& Value);
 
-	void EquipEquipment(ABaseEquipmentActor* InEquipment, ECharacterEquipmentSlot InSlot);
+	void EquipEquipment(ABaseEquipmentActor* InEquipment, ECharacterEquipmentSlotType InSlot);
 	
-	void UnequipEquipment(ECharacterEquipmentSlot InSlot);
+	void UnequipEquipment(ECharacterEquipmentSlotType InSlot);
 
 	void AttachEquipment(ABaseEquipmentActor* InEquipment, const FName& InAttachPoint);
 	
 	void DetachEquipment(ABaseEquipmentActor* InEquipment);
 	
+	void SpawnAndAttach();
+
 	// This will handle a player possessing a character;
 	virtual void PlayerPossessCharacter();
 
@@ -72,10 +74,6 @@ public:
 	void CreateUI();
 
 protected:
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
-	TArray<FName> SocketNames;
-
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Equipment)
 	ABaseEquipmentActor* Helmet;
 
@@ -210,5 +208,3 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Interaction)
 	float DrawTime = 10;
 };
-
-

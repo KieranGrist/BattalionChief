@@ -63,8 +63,6 @@ void ABaseCharacter::UpdateSocketReferences()
 	if (!character_mesh)
 		return;
 
-	SocketNames = character_mesh->GetAllSocketNames();
-
 	HelmetSocket = character_mesh->GetSocketByName(HelmetAttachPoint);
 	FaceSocket = character_mesh->GetSocketByName(FaceAttachPoint);
 	TorsoSocket = character_mesh->GetSocketByName(TorsoAttachPoint);
@@ -213,36 +211,36 @@ void ABaseCharacter::SecondaryAction(const FInputActionValue& Value)
 
 }
 
-void ABaseCharacter::EquipEquipment(ABaseEquipmentActor* InEquipment, ECharacterEquipmentSlot InSlot)
+void ABaseCharacter::EquipEquipment(ABaseEquipmentActor* InEquipment, ECharacterEquipmentSlotType InSlot)
 {
 	switch (InSlot)
 	{
-	case ECharacterEquipmentSlot::Helmet:
+	case ECharacterEquipmentSlotType::Helmet:
 		Helmet = InEquipment;
 		AttachEquipment(Helmet, HelmetAttachPoint);
 		break;
-	case ECharacterEquipmentSlot::Face:
+	case ECharacterEquipmentSlotType::Face:
 		Face = InEquipment;
 		AttachEquipment(Face, FaceAttachPoint);
 		break;
-	case ECharacterEquipmentSlot::Torso:
+	case ECharacterEquipmentSlotType::Torso:
 		Torso = InEquipment;
 		AttachEquipment(Torso, TorsoAttachPoint);
 		break;
-	case ECharacterEquipmentSlot::Legs:
+	case ECharacterEquipmentSlotType::Legs:
 		Legs = InEquipment;
 		AttachEquipment(Legs, LegsAttachPoint);
 		break;
-	case ECharacterEquipmentSlot::BothHands:
+	case ECharacterEquipmentSlotType::BothHands:
 		RightHand = InEquipment;
 		LeftHand = InEquipment;
 		AttachEquipment(RightHand, RightHandAttachPoint);
 		break;
-	case ECharacterEquipmentSlot::LeftHand:
+	case ECharacterEquipmentSlotType::LeftHand:
 		LeftHand = InEquipment;
 		AttachEquipment(LeftHand, LeftHandAttachPoint);
 		break;
-	case ECharacterEquipmentSlot::RightHand:
+	case ECharacterEquipmentSlotType::RightHand:
 		RightHand = InEquipment;
 		AttachEquipment(RightHand, RightHandAttachPoint);
 		break;
@@ -252,48 +250,48 @@ void ABaseCharacter::EquipEquipment(ABaseEquipmentActor* InEquipment, ECharacter
 	}
 }
 
-void ABaseCharacter::UnequipEquipment(ECharacterEquipmentSlot InSlot)
+void ABaseCharacter::UnequipEquipment(ECharacterEquipmentSlotType InSlot)
 {
 	switch (InSlot)
 	{
-	case ECharacterEquipmentSlot::Helmet:
+	case ECharacterEquipmentSlotType::Helmet:
 		if (!Helmet)
 			return;
 		DetachEquipment(Helmet);
 		Helmet = nullptr;
 		break;
-	case ECharacterEquipmentSlot::Face:
+	case ECharacterEquipmentSlotType::Face:
 		if (!Face)
 			return;
 		DetachEquipment(Face);
 		Face = nullptr;
 		break;
-	case ECharacterEquipmentSlot::Torso:
+	case ECharacterEquipmentSlotType::Torso:
 		if (!Torso)
 			return;
 		DetachEquipment(Torso);
 		Torso = nullptr;
 		break;
-	case ECharacterEquipmentSlot::Legs:
+	case ECharacterEquipmentSlotType::Legs:
 		if (!Legs)
 			return;
 		DetachEquipment(Legs);
 		Legs = nullptr;
 		break;
-	case ECharacterEquipmentSlot::BothHands:
+	case ECharacterEquipmentSlotType::BothHands:
 		if (!RightHand)
 			return;
 		DetachEquipment(RightHand);
 		RightHand = nullptr;
 		LeftHand = nullptr;
 		break;
-	case ECharacterEquipmentSlot::LeftHand:
+	case ECharacterEquipmentSlotType::LeftHand:
 		if (!LeftHand)
 			return;
 		DetachEquipment(LeftHand);
 		LeftHand = nullptr;
 		break;
-	case ECharacterEquipmentSlot::RightHand:
+	case ECharacterEquipmentSlotType::RightHand:
 		if (!RightHand)
 			return;
 		DetachEquipment(RightHand);
@@ -314,8 +312,6 @@ void ABaseCharacter::AttachEquipment(ABaseEquipmentActor* InEquipment, const FNa
 	const USkeletalMeshSocket* socket = character_mesh->GetSocketByName(InSocketName);
 	if (!socket)
 		return;
-	FMatrix matrix;
-	socket->GetSocketMatrix(matrix, character_mesh);
 
 	// Perform the attachment
 	UStaticMeshComponent* object_mesh = InEquipment->GetObjectMesh();
@@ -326,16 +322,10 @@ void ABaseCharacter::AttachEquipment(ABaseEquipmentActor* InEquipment, const FNa
 	object_mesh->SetGenerateOverlapEvents(false);
 	object_mesh->SetNotifyRigidBodyCollision(false);
 
-	//InEquipment->AttachToComponent(character_mesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, InSocketName);
-
 	socket->AttachActor(InEquipment, character_mesh);
 
-	// Calculate relative transform adjustments
-	FVector adjusted_location = matrix.GetOrigin() + InEquipment->GetSlotRelativeGap();
-	FRotator adjusted_rotation = matrix.Rotator() + InEquipment->GetSlotRelativeRotation();
-
-	InEquipment->SetActorRelativeLocation(adjusted_location);
-	InEquipment->SetActorRelativeRotation(adjusted_rotation);
+	InEquipment->SetActorRelativeLocation(InEquipment->GetSlotRelativeGap());
+	InEquipment->SetActorRelativeRotation(InEquipment->GetSlotRelativeRotation());
 }
 
 

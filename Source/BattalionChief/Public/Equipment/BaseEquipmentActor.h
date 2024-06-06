@@ -3,55 +3,13 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Equipment/EquipmentDetails.h"
 #include "Objects/BaseObjectActor.h"
 #include "Components/StaticMeshComponent.h" // Include for static mesh component
 #include "Components/AudioComponent.h"
 #include "Particles/ParticleSystemComponent.h"
 #include "BaseEquipmentActor.generated.h"
 
-
-// This game is based on realism and in most cases firefighters will only take one or two things in their hands but certain things can be stored and this is useful to have
-UENUM(BlueprintType)
-enum class EEquipmentSize : uint8
-{
-    Error, 
-    Small,      // Small-sized equipment, I.E flashlight, compass, tic, can easily be put in a pocket and wont take allot of space
-    Medium,     // Medium-sized equipment, I.E. Halligan, Crowbar, Haligan bar. Conversion = Small slots 2:1 Medium slots
-    Large,      // Large-sized equipment, I.E Hose, Firefighter Axe, Fire extinguisher. PPE. Hard to store on a person but not impossible. Conversion = Medium Slots 2:1 large slot
-    ExtraLarge  // Extra-large equipment, I.E Spreaders, vehicle jack, air bags- cant really be stored on personage. Conversion = 2 Large Slots:1 Extra Large slot
-};
-
-// Slot the equipment will go in when equipped
-UENUM(BlueprintType)
-enum class ECharacterEquipmentSlot : uint8
-{
-    Error        UMETA(DisplayName = "Error"),
-    Helmet       UMETA(DisplayName = "Helmet"),
-    Face         UMETA(DisplayName = "Face"),
-    Torso        UMETA(DisplayName = "Torso"),
-    Legs         UMETA(DisplayName = "Legs"),
-    BothHands     UMETA(DisplayName = "Both Hands"),
-    LeftHand     UMETA(DisplayName = "Left Hand"),
-    RightHand    UMETA(DisplayName = "Right Hand")
-};
-
-// Define a flag for multiple slot selection
-ENUM_CLASS_FLAGS(ECharacterEquipmentSlot)
-
-USTRUCT()
-struct FConversionMapStruct
-{
-    GENERATED_BODY()
-
-public:
-    FConversionMapStruct() {};
-    FConversionMapStruct(const TMap<EEquipmentSize, int>& InMap);
-    int GetConversion(EEquipmentSize InSize) const;
-
-    protected:
-    UPROPERTY(EditAnywhere, Category = Equipment)
-    TMap<EEquipmentSize, int> ConversionMap;
-};
 
 UCLASS()
 class BATTALIONCHIEF_API ABaseEquipmentActor : public ABaseObjectActor
@@ -81,13 +39,13 @@ public:
     virtual float ScoreEquipment() const PURE_VIRTUAL(ABaseEquipmentActor::ScoreEquipment, return INDEX_NONE;);
     
     UFUNCTION(BlueprintCallable, Category = Equipment)
-    int GetSlotConversion(EEquipmentSize InCurrentSize, EEquipmentSize InDesiredSize) const;
+    int32 GetSlotConversion(EEquipmentSize InCurrentSize, EEquipmentSize InDesiredSize) const;
 
     UFUNCTION(BlueprintCallable, Category = Equipment)
     EEquipmentSize GetEquipmentSize() const;
 
     UFUNCTION(BlueprintCallable, Category = Equipment)
-    ECharacterEquipmentSlot GetCharacterEquipmentSlot() const;
+    ECharacterEquipmentSlotType GetCharacterEquipmentSlot() const;
 
     UFUNCTION(BlueprintCallable, Category = Equipment)
     const FVector& GetSlotRelativeGap() const;
@@ -102,7 +60,7 @@ public:
     void SetSlotRelativeRotation(const FRotator& InSlotRelativeRotation);
 
     UFUNCTION(BlueprintCallable, Category = Equipment)
-    int GetHands() const;
+    int32 GetHands() const;
 
 protected:
     UPROPERTY(EditAnywhere, Category = Equipment)
@@ -112,7 +70,7 @@ protected:
     EEquipmentSize EquipmentSize;
 
     UPROPERTY(EditAnywhere, Category = Equipment)
-    ECharacterEquipmentSlot CharacterEquipmentSlot;
+    ECharacterEquipmentSlotType CharacterEquipmentSlot;
 
     UPROPERTY(EditAnywhere, Category = Equipment)
     FVector SlotRelativeGap;
@@ -122,7 +80,7 @@ protected:
 
     // Only used by objects that can be held
     UPROPERTY(EditAnywhere, Category = Equipment)
-    int Hands = INDEX_NONE;
+    int32 Hands = INDEX_NONE;
 
     // Sound component for sound effects
     UPROPERTY(EditAnywhere, Category = Equipment)
