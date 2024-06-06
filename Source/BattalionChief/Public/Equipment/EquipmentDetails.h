@@ -13,123 +13,123 @@ class USkeletalMeshSocket;
 UENUM(BlueprintType)
 enum class EEquipmentSize : uint8
 {
-    Error,
-    Small,      // Small-sized equipment, I.E flashlight, compass, tic, can easily be put in a pocket and wont take allot of space
-    Medium,     // Medium-sized equipment, I.E. Halligan, Crowbar, Haligan bar. Conversion = Small slots 2:1 Medium slots
-    Large,      // Large-sized equipment, I.E Hose, Firefighter Axe, Fire extinguisher. PPE. Hard to store on a person but not impossible. Conversion = Medium Slots 2:1 large slot
-    ExtraLarge  // Extra-large equipment, I.E Spreaders, vehicle jack, air bags- cant really be stored on personage. Conversion = 2 Large Slots:1 Extra Large slot
+	Error,
+	Small,      // Small-sized equipment, I.E flashlight, compass, tic, can easily be put in a pocket and wont take allot of space
+	Medium,     // Medium-sized equipment, I.E. Halligan, Crowbar, Haligan bar. Conversion = Small slots 2:1 Medium slots
+	Large,      // Large-sized equipment, I.E Hose, Firefighter Axe, Fire extinguisher. PPE. Hard to store on a person but not impossible. Conversion = Medium Slots 2:1 large slot
+	ExtraLarge  // Extra-large equipment, I.E Spreaders, vehicle jack, air bags- cant really be stored on personage. Conversion = 2 Large Slots:1 Extra Large slot
 };
 
 // Slot the equipment will go in when equipped
 UENUM(BlueprintType)
 enum class ECharacterEquipmentSlotType : uint8
 {
-    Error        UMETA(DisplayName = "Error"),
-    Helmet       UMETA(DisplayName = "Helmet"),
-    Face         UMETA(DisplayName = "Face"),
-    Torso        UMETA(DisplayName = "Torso"),
-    Legs         UMETA(DisplayName = "Legs"),
-    BothHands     UMETA(DisplayName = "Both Hands"),
-    LeftHand     UMETA(DisplayName = "Left Hand"),
-    RightHand    UMETA(DisplayName = "Right Hand")
+	Error        UMETA(DisplayName = "Error"),
+	Helmet       UMETA(DisplayName = "Helmet"),
+	Face         UMETA(DisplayName = "Face"),
+	Torso        UMETA(DisplayName = "Torso"),
+	Legs         UMETA(DisplayName = "Legs"),
+	BothHands    UMETA(DisplayName = "Both Hands"),
+	LeftHand     UMETA(DisplayName = "Left Hand"),
+	RightHand    UMETA(DisplayName = "Right Hand")
 };
 
 USTRUCT(BlueprintType)
 struct FBaseCharacterEquipmentSlot
 {
-    GENERATED_BODY()
+	GENERATED_BODY()
 
 public:
-    FBaseCharacterEquipmentSlot() {}
+	FBaseCharacterEquipmentSlot() {}
 
-    FBaseCharacterEquipmentSlot(ECharacterEquipmentSlotType InCharacterEquipmentSlotType, FName InSocketName);
-   
-    static float GetSlotConversion(EEquipmentSize InCurrentSize, EEquipmentSize InDesiredSize);
+	FBaseCharacterEquipmentSlot(ECharacterEquipmentSlotType InCharacterEquipmentSlotType, FName InSocketName);
 
-    void SpawnEquipment();
-   
-    void SetupSocket(USkeletalMeshComponent* InCharacterMesh);
+	static float GetSlotConversion(EEquipmentSize InCurrentSize, EEquipmentSize InDesiredSize);
 
-    void AttachEquipment(ABaseEquipmentActor* InEquipment);
+	void SpawnEquipment();
 
-    void DetachEquipment();
+	void SetupSocket(USkeletalMeshComponent* InCharacterMesh);
 
-    // Getter and Setter for CharacterEquipmentSlotType
-    ECharacterEquipmentSlotType GetCharacterEquipmentSlotType() const;
-   
-    void SetCharacterEquipmentSlotType(ECharacterEquipmentSlotType InCharacterEquipmentSlotType);
+	void AttachEquipment(ABaseEquipmentActor* InEquipment);
 
-    // Getter and Setter for CharacterMesh
-    USkeletalMeshComponent* GetCharacterMesh() const;
+	void DetachEquipment();
 
-    // Getter and Setter for Socket
-    const USkeletalMeshSocket* GetSocket() const;
+	// Getter and Setter for CharacterEquipmentSlotType
+	ECharacterEquipmentSlotType GetCharacterEquipmentSlotType() const;
 
-    // Getter and Setter for SocketName
-    const FName& GetSocketName() const;
-   
-    void SetSocketName(const FName& InSocketName);
+	void SetCharacterEquipmentSlotType(ECharacterEquipmentSlotType InCharacterEquipmentSlotType);
 
-    // Getter and Setter for Equipment
-    ABaseEquipmentActor* GetEquipment() const;
-   
-    void SetEquipment(ABaseEquipmentActor* InEquipment);
+	// Getter and Setter for CharacterMesh
+	USkeletalMeshComponent* GetCharacterMesh() const;
 
-    // Getter and Setter for SpawnEquipment
-    const TSubclassOf<ABaseEquipmentActor>& GetSpawnEquipmentClass() const;
-    
-    void SetSpawnEquipmentClass(const TSubclassOf<ABaseEquipmentActor>& InSpawnEquipment);
+	// Getter and Setter for Socket
+	const USkeletalMeshSocket* GetSocket() const;
 
-    // Getter and Setter for Index
-    int32 GetIndex() const;
-    
-    void SetIndex(int32 InIndex);
+	// Getter and Setter for SocketName
+	const FName& GetSocketName() const;
+
+	void SetSocketName(const FName& InSocketName);
+
+	// Getter and Setter for Equipment
+	ABaseEquipmentActor* GetEquipment() const;
+
+	void SetEquipment(ABaseEquipmentActor* InEquipment);
+
+	// Getter and Setter for SpawnEquipment
+	const TSubclassOf<ABaseEquipmentActor>& GetSpawnEquipmentClass() const;
+
+	void SetSpawnEquipmentClass(const TSubclassOf<ABaseEquipmentActor>& InSpawnEquipment);
+
+	// Getter and Setter for Index
+	int32 GetIndex() const;
+
+	void SetIndex(int32 InIndex);
 
 protected:
-    UPROPERTY(EditAnywhere, Category = Equipment)
-    ECharacterEquipmentSlotType CharacterEquipmentSlotType = ECharacterEquipmentSlotType::Helmet;
+	UPROPERTY(EditAnywhere, Category = Equipment)
+	ECharacterEquipmentSlotType CharacterEquipmentSlotType = ECharacterEquipmentSlotType::Helmet;
 
-    UPROPERTY(EditAnywhere, Category = Equipment)
-    USkeletalMeshComponent* CharacterMesh;
-    
-    UPROPERTY(VisibleAnywhere, Category = Equipment)
-    const USkeletalMeshSocket* Socket;
+	UPROPERTY(EditAnywhere, Category = Equipment)
+	USkeletalMeshComponent* CharacterMesh;
 
-    UPROPERTY(EditAnywhere, Category = Equipment)
-    FName SocketName = FName("HelmetSocket");
+	UPROPERTY(VisibleAnywhere, Category = Equipment)
+	const USkeletalMeshSocket* Socket;
 
-    UPROPERTY(EditAnywhere, Category = Equipment)
-    ABaseEquipmentActor* Equipment;
+	UPROPERTY(EditAnywhere, Category = Equipment)
+	FName SocketName = FName("HelmetSocket");
 
-    UPROPERTY(EditAnywhere, Category = Equipment)
-    TSubclassOf<ABaseEquipmentActor> SpawnEquipmentClass;
+	UPROPERTY(EditAnywhere, Category = Equipment)
+	ABaseEquipmentActor* Equipment;
 
-    UPROPERTY(EditAnywhere, Category = Equipment)
-    int32 Index =  INDEX_NONE;
+	UPROPERTY(EditAnywhere, Category = Equipment)
+	TSubclassOf<ABaseEquipmentActor> SpawnEquipmentClass;
+
+	UPROPERTY(EditAnywhere, Category = Equipment)
+	int32 Index = INDEX_NONE;
 };
 
 USTRUCT()
 struct FPocketEquipment : public FBaseCharacterEquipmentSlot
 {
-    GENERATED_BODY()
+	GENERATED_BODY()
 
 public:
-    
-    FPocketEquipment() {}
 
-    FPocketEquipment(ECharacterEquipmentSlotType InCharacterEquipmentSlotType, FName InSocketName);
+	FPocketEquipment() {}
 
-    void AddEquipmentToPocket();
+	FPocketEquipment(ECharacterEquipmentSlotType InCharacterEquipmentSlotType, FName InSocketName);
 
-    UPROPERTY(EditAnywhere, Category = Pocket)
-    EEquipmentSize PocketSize;
+	void AddEquipmentToPocket();
 
-    UPROPERTY(EditAnywhere, Category = Pocket)
-    int32 PocketCapacity;
+	UPROPERTY(EditAnywhere, Category = Pocket)
+	EEquipmentSize PocketSize;
 
-    UPROPERTY(EditAnywhere, Category = Pocket)
-    TMap<int32, FVector> PocketOffsetMap;
-    
-    UPROPERTY(EditAnywhere, Category = Pocket)
-    TMap<int32, FBaseCharacterEquipmentSlot> StoredEquipmentMap;
+	UPROPERTY(EditAnywhere, Category = Pocket)
+	int32 PocketCapacity;
+
+	UPROPERTY(EditAnywhere, Category = Pocket)
+	TMap<int32, FVector> PocketOffsetMap;
+
+	UPROPERTY(EditAnywhere, Category = Pocket)
+	TMap<int32, FBaseCharacterEquipmentSlot> StoredEquipmentMap;
 };
