@@ -13,7 +13,12 @@ FBaseCharacterEquipmentSlot::FBaseCharacterEquipmentSlot(ECharacterEquipmentSlot
 
 void FBaseCharacterEquipmentSlot::SpawnEquipment()
 {
-
+    if (!SpawnEquipmentClass || !CharacterMesh || Equipment)
+        return;
+   
+    FActorSpawnParameters spawn_params;
+    spawn_params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButAlwaysSpawn;
+    AttachEquipment(CharacterMesh->GetWorld()->SpawnActor<ABaseEquipmentActor>(SpawnEquipmentClass, CharacterMesh->GetComponentLocation(), FRotator::ZeroRotator, spawn_params));
 }
 
 void FBaseCharacterEquipmentSlot::SetupSocket(USkeletalMeshComponent* InCharacterMesh)
@@ -23,6 +28,8 @@ void FBaseCharacterEquipmentSlot::SetupSocket(USkeletalMeshComponent* InCharacte
         return;
 
     Socket = CharacterMesh->GetSocketByName(SocketName);
+
+    SpawnEquipment();
 }
 
 void FBaseCharacterEquipmentSlot::AttachEquipment(ABaseEquipmentActor* InEquipment)
@@ -50,6 +57,7 @@ void FBaseCharacterEquipmentSlot::DetachEquipment()
 {
     if (!Equipment)
         return;
+
     Equipment->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
     UStaticMeshComponent* object_mesh = Equipment->GetObjectMesh();
     object_mesh->SetSimulatePhysics(true);

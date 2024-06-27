@@ -132,8 +132,7 @@ void ABaseCharacter::Look(const FInputActionValue& Value)
 	FVector2D look_axis_vector = Value.Get<FVector2D>();
 
 	if (Controller != nullptr)
-	{
-		// add yaw and pitch input to controller
+	{  
 		AddControllerYawInput(look_axis_vector.X);
 		AddControllerPitchInput(look_axis_vector.Y);
 	}
@@ -150,12 +149,12 @@ void ABaseCharacter::Interact(const FInputActionValue& Value)
 	ActorsToIgnore =
 	{
 		this,
-	HelmetCharacterEquipmentSlot.GetEquipment(),
-	FaceCharacterEquipmentSlot.GetEquipment(),
-	TorsoCharacterEquipmentSlot.GetEquipment(),
-	LegsCharacterEquipmentSlot.GetEquipment(),
-	RightHandCharacterEquipmentSlot.GetEquipment(),
-	LeftHandCharacterEquipmentSlot.GetEquipment()
+		HelmetCharacterEquipmentSlot.GetEquipment(),
+		FaceCharacterEquipmentSlot.GetEquipment(),
+		TorsoCharacterEquipmentSlot.GetEquipment(),
+		LegsCharacterEquipmentSlot.GetEquipment(),
+		RightHandCharacterEquipmentSlot.GetEquipment(),
+		LeftHandCharacterEquipmentSlot.GetEquipment()
 	};
 	UKismetSystemLibrary::BoxTraceSingle(this, StartLocation, EndLocation, HalfSize, Orientation, TraceChannel, TraceComplex, ActorsToIgnore, EDrawDebugTrace::ForDuration, HitResult, IgnoreSelf, TraceColor, TraceHitColor, DrawTime);
 

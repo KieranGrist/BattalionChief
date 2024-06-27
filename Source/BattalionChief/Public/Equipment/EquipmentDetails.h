@@ -46,6 +46,7 @@ public:
 
 	static float GetSlotConversion(EEquipmentSize InCurrentSize, EEquipmentSize InDesiredSize);
 
+	//UFUNCTION(BlueprintCallable, CallInEditor, Category = Equipment)
 	void SpawnEquipment();
 
 	void SetupSocket(USkeletalMeshComponent* InCharacterMesh);

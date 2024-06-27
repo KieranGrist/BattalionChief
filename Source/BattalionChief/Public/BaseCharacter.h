@@ -132,6 +132,9 @@ protected:
 
 	UPROPERTY(EditAnywhere,  Category = Interaction)
 	float InteractionRange = 150;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input)
+	float Sensitivty = 5;
 
 	UPROPERTY(EditAnywhere, Category = Interaction)
 	FVector StartLocation;
